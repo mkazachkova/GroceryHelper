@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:backgroundTint="@color/colorPrimary"
+        android:background="@color/colorPrimary"
         app:itemTextColor="#E0F2F1"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
