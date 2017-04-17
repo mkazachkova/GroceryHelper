@@ -12,9 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Fragment shoppingFrag;
+    private Fragment receiptsFrag;
+    private Fragment expirationFrag;
+    private Fragment statsFrag;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        shoppingFrag = new ContentShoppingFrag();
+        receiptsFrag = new ContentReceiptFrag();
+        expirationFrag = new ContentExpirationFrag();
+        statsFrag = new  ContentSettingsFrag();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, shoppingFrag).commit();
+
     }
 
     @Override
@@ -81,13 +98,25 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_list) {
-            // Handle the camera action
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, shoppingFrag);
+            transaction.addToBackStack(null);
+            transaction.commit();
         } else if (id == R.id.nav_receipts) {
-
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, receiptsFrag);
+            transaction.addToBackStack(null);
+            transaction.commit();
         } else if (id == R.id.nav_statistics) {
-
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, statsFrag);
+            transaction.addToBackStack(null);
+            transaction.commit();
         } else if (id == R.id.nav_expiration) {
-
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, expirationFrag);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
