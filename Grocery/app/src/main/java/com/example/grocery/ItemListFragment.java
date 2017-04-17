@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.test.AndroidTestRunner;
 import android.text.AndroidCharacter;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.AdapterView;
 import android.app.AlertDialog;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -49,14 +51,23 @@ public class ItemListFragment extends Fragment {
 
                 final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
-                dialogBuilder.setTitle("Custom dialog");
-                dialogBuilder.setMessage("Enter text below");
-                dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                //dialogBuilder.setTitle("Apples");
+                TextView title = new TextView(getActivity());
+                title.setText("Apples");
+                title.setGravity(Gravity.CENTER);
+                title.setTextSize(20);
+
+                dialogBuilder.setCustomTitle(title);
+
+
+                //dialogBuilder.setMessage("Enter text below");
+
+                dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //do something with edt.getText().toString();
                     }
                 });
-                dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                dialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //pass
                     }
