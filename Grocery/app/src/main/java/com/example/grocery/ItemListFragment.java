@@ -1,13 +1,19 @@
 package com.example.grocery;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.test.AndroidTestRunner;
+import android.text.AndroidCharacter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView;
+import android.app.AlertDialog;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -17,6 +23,7 @@ import java.util.ArrayList;
  */
 public class ItemListFragment extends Fragment {
 
+    private ListView shoppingListView;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -29,6 +36,36 @@ public class ItemListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         getActivity().setTitle("My Shopping List");
 
+        //get our list view
+        shoppingListView = (ListView) view.findViewById(R.id.itemsList);
+
+        shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater =  getActivity().getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.custom_dialogue, null);
+                dialogBuilder.setView(dialogView);
+
+                final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+
+                dialogBuilder.setTitle("Custom dialog");
+                dialogBuilder.setMessage("Enter text below");
+                dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //do something with edt.getText().toString();
+                    }
+                });
+                dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //pass
+                    }
+                });
+                AlertDialog b = dialogBuilder.create();
+                b.show();
+            }
+        });
+
         String[] groceryItems = {"Apples", "Watermelon", "Cheese", "Lemon", "Milk"};
 
         ListView listView = (ListView) view.findViewById(R.id.itemsList);
@@ -40,6 +77,8 @@ public class ItemListFragment extends Fragment {
         );
 
         listView.setAdapter(listViewAdapter);
+
+
 
         return view;
     }
