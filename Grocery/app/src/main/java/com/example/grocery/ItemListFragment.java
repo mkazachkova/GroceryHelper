@@ -27,6 +27,7 @@ public class ItemListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        getActivity().setTitle("My Shopping List");
 
         String[] groceryItems = {"Apples", "Watermelon", "Cheese", "Lemon", "Milk"};
 

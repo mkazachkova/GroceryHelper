@@ -20,15 +20,15 @@ import android.support.v4.app.FragmentTransaction;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-<<<<<<< HEAD
-    private Fragment shoppingFrag;
+
+  //  private Fragment shoppingFrag;
     private Fragment receiptsFrag;
     private Fragment expirationFrag;
     private Fragment statsFrag;
     private FragmentTransaction transaction;
-=======
+
     private static ItemListFragment itemFragment = new ItemListFragment();
->>>>>>> 3181db20e8335f3da04c74ea2647c4914d6a3795
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,19 +55,19 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-<<<<<<< HEAD
-        shoppingFrag = new ContentShoppingFrag();
+
+//        shoppingFrag = new ContentShoppingFrag();
         receiptsFrag = new ContentReceiptFrag();
         expirationFrag = new ContentExpirationFrag();
         statsFrag = new  ContentSettingsFrag();
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, shoppingFrag).commit();
-=======
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame, itemFragment);
-        fragmentTransaction.commit();
->>>>>>> 3181db20e8335f3da04c74ea2647c4914d6a3795
+                .add(R.id.fragment_container, itemFragment).commit();
+
+       // android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+       // fragmentTransaction.replace(R.id.content_frame, itemFragment);
+       // fragmentTransaction.commit();
+
 
     }
 
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_list) {
             transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, shoppingFrag);
+            transaction.replace(R.id.fragment_container, itemFragment);
             transaction.addToBackStack(null);
             transaction.commit();
         } else if (id == R.id.nav_receipts) {
