@@ -1,12 +1,10 @@
 package com.example.grocery;
 
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.test.AndroidTestRunner;
-import android.text.AndroidCharacter;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +16,7 @@ import android.widget.AdapterView;
 import android.app.AlertDialog;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.ArrayList;
+import android.widget.Toast;
 
 
 /**
@@ -48,20 +45,46 @@ public class ItemListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater =  getActivity().getLayoutInflater();
-                final View dialogView = inflater.inflate(R.layout.custom_dialogue, null);
+                final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                 dialogBuilder.setView(dialogView);
 
                 final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
                 //dialogBuilder.setTitle("Apples");
-                TextView title = new TextView(getActivity());
-                title.setText("Apples");
-                title.setGravity(Gravity.CENTER);
-                title.setTextSize(25);
-                title.setTextColor(Color.BLACK);
+          //      TextView title = new TextView(getActivity());
+           //     title.setText("Apples");
+             //   title.setGravity(Gravity.CENTER);
+               // title.setTextSize(25);
+                //title.setTextColor(Color.BLACK);
 
 
-                dialogBuilder.setCustomTitle(title);
+                //dialogBuilder.setCustomTitle(title);
+
+                Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
+                delete.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        Context context = getActivity();
+                        CharSequence text = "Delete Pressed!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                });
+
+                Button save = (Button) dialogView.findViewById(R.id.btn_save);
+                save.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        Context context = getActivity();
+                        CharSequence text = "Save pressed!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                });
 
 
                 //dialogBuilder.setMessage("Enter text below");
@@ -96,8 +119,6 @@ public class ItemListFragment extends Fragment {
         );
 
         listView.setAdapter(listViewAdapter);
-
-
 
         return view;
     }

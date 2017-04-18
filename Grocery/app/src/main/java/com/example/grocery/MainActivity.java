@@ -1,10 +1,14 @@
 package com.example.grocery;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+//import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,7 +34,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction transaction;
 
     private static ItemListFragment itemFragment = new ItemListFragment();
-
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +43,19 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater =  getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
+                dialogBuilder.setView(dialogView);
+
+
+                dialogBuilder.show();
+               // AlertDialog b = dialogBuilder.create();
+               // b.show();
             }
         });
 
@@ -110,6 +123,31 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_list) {
+
+            //Button fab = (Button) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view)
+                {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getBaseContext());
+                    LayoutInflater inflater =  getLayoutInflater();
+                    final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
+                    dialogBuilder.setView(dialogView);
+
+                    AlertDialog b = dialogBuilder.create();
+                    b.show();
+                   /* Context context = getApplicationContext();
+                    CharSequence text = "Button pressed";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();*/
+
+
+                }
+            });
+
+
+
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, itemFragment);
             transaction.addToBackStack(null);
