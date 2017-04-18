@@ -50,16 +50,6 @@ public class ItemListFragment extends Fragment {
 
                 final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
-                //dialogBuilder.setTitle("Apples");
-          //      TextView title = new TextView(getActivity());
-           //     title.setText("Apples");
-             //   title.setGravity(Gravity.CENTER);
-               // title.setTextSize(25);
-                //title.setTextColor(Color.BLACK);
-
-
-                //dialogBuilder.setCustomTitle(title);
-
                 Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                 delete.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view)
