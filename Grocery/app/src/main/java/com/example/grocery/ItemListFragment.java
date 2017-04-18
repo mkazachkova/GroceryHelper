@@ -2,6 +2,7 @@ package com.example.grocery;
 
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.test.AndroidTestRunner;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.app.AlertDialog;
@@ -55,25 +57,31 @@ public class ItemListFragment extends Fragment {
                 TextView title = new TextView(getActivity());
                 title.setText("Apples");
                 title.setGravity(Gravity.CENTER);
-                title.setTextSize(20);
+                title.setTextSize(25);
+                title.setTextColor(Color.BLACK);
+
 
                 dialogBuilder.setCustomTitle(title);
 
 
                 //dialogBuilder.setMessage("Enter text below");
 
-                dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
+              //  dialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                 //   public void onClick(DialogInterface dialog, int whichButton) {
                         //do something with edt.getText().toString();
-                    }
-                });
-                dialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
+              //      }
+              //  });
+               // dialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                //    public void onClick(DialogInterface dialog, int whichButton) {
                         //pass
-                    }
-                });
+               //     }
+              //  });
                 AlertDialog b = dialogBuilder.create();
                 b.show();
+             //   Button nbutton = b.getButton(DialogInterface.BUTTON_NEGATIVE);
+             //   nbutton.setBackgroundColor(Color.RED);
+             //   Button pbutton = b.getButton(DialogInterface.BUTTON_POSITIVE);
+             //   pbutton.setBackgroundColor(Color.GREEN);
             }
         });
 
