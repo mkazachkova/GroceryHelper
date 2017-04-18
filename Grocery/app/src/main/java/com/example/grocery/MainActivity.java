@@ -152,8 +152,33 @@ public class MainActivity extends AppCompatActivity
                     delete.setText("Cancel");
                     delete.setBackgroundColor(Color.GRAY);
 
+                    delete.setOnClickListener(new View.OnClickListener(){
+                        public void onClick(View view)
+                        {
+                            Context context = MainActivity.this;
+                            CharSequence text = "Cancel Pressed!";
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
+                    });
+
+
                     Button save = (Button) dialogView.findViewById(R.id.btn_save);
                     //save.setGravity(Gravity.RIGHT);
+
+                    save.setOnClickListener(new View.OnClickListener(){
+                        public void onClick(View view)
+                        {
+                            Context context = MainActivity.this;
+                            CharSequence text = "Save pressed!";
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
+                    });
 
                     dialogBuilder.show();
 
