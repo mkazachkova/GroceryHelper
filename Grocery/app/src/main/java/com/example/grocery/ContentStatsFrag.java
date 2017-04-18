@@ -1,24 +1,57 @@
 package com.example.grocery;
 
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.annotation.NonNull;
 
 /**
- * Created by mariyakazachkova on 4/16/17.
+ * Created by JSK on 4/18/17.
  */
 
-public class ContentSettingsFrag extends Fragment{
+public class ContentStatsFrag extends Fragment{
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view  = inflater.inflate(R.layout.settings_main_fragment, container, false);
-        getActivity().setTitle("Settings");
+        View view  = inflater.inflate(R.layout.statistics_main_fragment, container, false);
+        getActivity().setTitle("My Statistics");
+
+        //bottom drawer for split toolbar
+        BottomNavigationView botNavView = (BottomNavigationView) view.findViewById(R.id.stats_bottom_navigation);
+        botNavView.setOnNavigationItemSelectedListener
+                (new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment selectedFragment = null;
+                        switch (item.getItemId()) {
+                            case R.id.stats_calendar:
+                                selectedFragment = CalendarFrag.newInstance();
+                                break;
+                            case R.id.stats_graph:
+                                selectedFragment = GraphFrag.newInstance();
+                                break;
+                        }
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_layout, selectedFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                        return true;
+                    }
+                });
+        //Manually displaying the first fragment - one time only
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, CalendarFrag.newInstance());
+        transaction.commit();
+
         return view;
     }
     // Called at the start of the visible lifetime.
