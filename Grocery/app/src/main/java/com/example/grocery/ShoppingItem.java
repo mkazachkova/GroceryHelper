@@ -15,4 +15,10 @@ public class ShoppingItem {
         this.reminderDays = reminderDays;
     }
 
+    public String getName() {
+        return  this.name;
+    }
+
+
+
 }

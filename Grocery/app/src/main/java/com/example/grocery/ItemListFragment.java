@@ -2,21 +2,19 @@ package com.example.grocery;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.app.AlertDialog;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 /**
@@ -25,6 +23,7 @@ import android.widget.Toast;
 public class ItemListFragment extends Fragment {
 
     private ListView shoppingListView;
+    protected static ArrayList<ShoppingItem> myItems;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -98,14 +97,18 @@ public class ItemListFragment extends Fragment {
             }
         });
 
-        String[] groceryItems = {"Apples", "Watermelon", "Cheese", "Lemon", "Milk"};
+       // String[] groceryItems = {"Apples", "Watermelon", "Cheese", "Lemon", "Milk"};
+
+        //populate arryaylist with fake data here!
 
         ListView listView = (ListView) view.findViewById(R.id.itemsList);
 
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+        populateMyItems();
+
+        ShoppingListAdapter listViewAdapter = new ShoppingListAdapter(
                 getActivity(),
-                android.R.layout.simple_list_item_1,
-                groceryItems
+                R.layout.single_item,
+                myItems
         );
 
         listView.setAdapter(listViewAdapter);
@@ -113,4 +116,22 @@ public class ItemListFragment extends Fragment {
         return view;
     }
 
+
+    public void populateMyItems() {
+
+        myItems = new ArrayList<ShoppingItem>();
+        ShoppingItem one = new ShoppingItem("Apples", 1, 0);
+        ShoppingItem two = new ShoppingItem("Watermelon", 1, 0);
+        ShoppingItem three = new ShoppingItem("Cheese", 1, 0);
+        ShoppingItem four = new ShoppingItem("Lemon", 1, 0);
+        ShoppingItem five = new ShoppingItem("Milk", 1, 0);
+
+        myItems.add(one);
+        myItems.add(three);
+        myItems.add(four);
+        myItems.add(five);
+        myItems.add(two);
+
+    }
 }
+
