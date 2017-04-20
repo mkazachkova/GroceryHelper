@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity
                 delete.setBackgroundColor(Color.GRAY);
 
                 Button save = (Button) dialogView.findViewById(R.id.btn_save);
-                //save.setGravity(Gravity.RIGHT);
 
 
 

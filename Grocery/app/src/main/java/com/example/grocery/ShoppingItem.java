@@ -19,6 +19,8 @@ public class ShoppingItem {
         return  this.name;
     }
 
-
+    public int getDays() {
+        return this.reminderDays;
+    }
 
 }
