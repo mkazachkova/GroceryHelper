@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //import android.support.v7.app.AlertDialog;
@@ -267,6 +268,78 @@ public class MainActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
         } else if (id == R.id.nav_expiration) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                    LayoutInflater inflater =  MainActivity.this.getLayoutInflater();
+                    final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
+                    dialogBuilder.setView(dialogView);
+
+                    // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+
+                    Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
+                    delete.setOnClickListener(new View.OnClickListener(){
+                        public void onClick(View view)
+                        {
+                            Context context = MainActivity.this;
+                            CharSequence text = "Delete Pressed!";
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
+                    });
+
+                    TextView quantity = (TextView) dialogView.findViewById(R.id.textView);
+                    EditText name = (EditText) dialogView.findViewById(R.id.editTitle);
+                    name.setText("");
+                    name.setHint("Enter Item Name");
+                    quantity.setVisibility(View.GONE);
+
+
+                    Button save = (Button) dialogView.findViewById(R.id.btn_save);
+                    save.setOnClickListener(new View.OnClickListener(){
+                        public void onClick(View view)
+                        {
+                            Context context = MainActivity.this;
+                            CharSequence text = "Save pressed!";
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
+                    });
+
+
+                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+                    quantitySpinner.setVisibility(View.GONE);
+
+                /*final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
+                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
+                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                quantitySpinner.setAdapter(quanAdapter);
+                quantitySpinner.setSelection(0);*/
+
+
+
+                    Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+
+                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+                            R.array.reminderTypes,android.R.layout.simple_spinner_item);
+                    remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    reminderSpinner.setAdapter(remindAdapter);
+                    reminderSpinner.setSelection(0);
+
+
+                    AlertDialog b = dialogBuilder.create();
+                    b.show();
+                }
+            });
+
+
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, expirationFrag);
             transaction.addToBackStack(null);

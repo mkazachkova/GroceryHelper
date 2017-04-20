@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#4b7ac1"
+        android:background="#35588e"
         android:weightSum="1">
 
 
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:inputType="text"
-            android:text="Chicken Breast"
+            android:text="Chicken breast"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold" />

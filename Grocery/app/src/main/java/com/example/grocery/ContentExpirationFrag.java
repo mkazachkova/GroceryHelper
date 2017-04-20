@@ -112,7 +112,7 @@ public class ContentExpirationFrag extends Fragment {
                 remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                 reminderSpinner.setAdapter(remindAdapter);
-                reminderSpinner.setSelection(0);
+                reminderSpinner.setSelection(3);
 
 
                 AlertDialog b = dialogBuilder.create();
