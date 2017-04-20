@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4b7ac1">
+    android:background="#a0c4fc"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#a0c4fc"
+        android:background="#4b7ac1"
         android:weightSum="1">
 
 
@@ -19,7 +20,7 @@
             android:gravity="center"
             android:inputType="text"
             android:text="Chicken Breast"
-            android:textColor="#030303"
+            android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -33,49 +34,43 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="244dp"
+            android:layout_width="254dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.80"
             android:text="  Quantity:"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/edit1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="1"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" /> />
+        <Spinner
+            android:id="@+id/quantity_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="#a0c4fc"
+            android:visibility="visible" />
 
 
     </LinearLayout>
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:weightSum="1">
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="254dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.80"
             android:text="  Expiration Reminder Days:"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/edit2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="0"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
+        <Spinner
+            android:id="@+id/reminder_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="#a0c4fc"
+            android:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout

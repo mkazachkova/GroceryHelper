@@ -67,6 +67,15 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingItem>{
             case "Cheese":
                 foodType.setImageResource(R.drawable.cheese_2_icon);
                 break;
+            case "Chicken breast":
+                foodType.setImageResource(R.drawable.chicken_leg_icon);
+                break;
+            case "Bread":
+                foodType.setImageResource(R.drawable.croissant_icon);
+                break;
+            case "Garlic":
+                foodType.setImageResource(R.drawable.garlic_icon);
+                break;
             default:
                 break;
         }

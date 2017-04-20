@@ -4,7 +4,30 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string-array name="quantityTypes">
+        <item><b><u>1</u></b></item>
+        <item><b><u>2</u></b></item>
+        <item><b><u>3</u></b></item>
+        <item><b><u>4</u></b></item>
+        <item><b><u>5</u></b></item>
+        <item><b><u>6</u></b></item>
+        <item><b><u>7</u></b></item>
+        <item><b><u>8</u></b></item>
+        <item><b><u>9</u></b></item>
+    </string-array>
 
+    <string-array name="reminderTypes">
+        <item><b><u>0</u></b></item>
+        <item><b><u>1</u></b></item>
+        <item><b><u>2</u></b></item>
+        <item><b><u>3</u></b></item>
+        <item><b><u>4</u></b></item>
+        <item><b><u>5</u></b></item>
+        <item><b><u>6</u></b></item>
+        <item><b><u>7</u></b></item>
+        <item><b><u>8</u></b></item>
+        <item><b><u>9</u></b></item>
+    </string-array>
 
     <string name="action_settings">Settings</string>
 

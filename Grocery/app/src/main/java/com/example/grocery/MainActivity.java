@@ -17,8 +17,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 //import android.support.v7.app.AlertDialog;
@@ -63,6 +65,54 @@ public class MainActivity extends AppCompatActivity
 
                 Button save = (Button) dialogView.findViewById(R.id.btn_save);
                 //save.setGravity(Gravity.RIGHT);
+
+
+
+                delete.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        Context context = MainActivity.this;
+                        CharSequence text = "Cancel Pressed!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                });
+
+
+                save.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        Context context = MainActivity.this;
+                        CharSequence text = "Save pressed!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                });
+
+                Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+
+                final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
+                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                quantitySpinner.setAdapter(quanAdapter);
+                quantitySpinner.setSelection(0);
+
+
+
+                Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+
+                final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+                        R.array.reminderTypes,android.R.layout.simple_spinner_item);
+                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                reminderSpinner.setAdapter(remindAdapter);
+                reminderSpinner.setSelection(0);
+
 
                 dialogBuilder.show();
 
@@ -177,6 +227,26 @@ public class MainActivity extends AppCompatActivity
                             toast.show();
                         }
                     });
+
+                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+
+                    final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+                            R.array.quantityTypes,android.R.layout.simple_spinner_item);
+                    quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    quantitySpinner.setAdapter(quanAdapter);
+                    quantitySpinner.setSelection(0);
+
+
+
+                    Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+
+                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+                            R.array.reminderTypes,android.R.layout.simple_spinner_item);
+                    remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    reminderSpinner.setAdapter(remindAdapter);
+                    reminderSpinner.setSelection(0);
 
                     dialogBuilder.show();
 
