@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 /**
  * Created by Kiki on 4/20/17.
  */
-
+//TODO: this frag is not used!
 public class ReceiptImageFrag extends Fragment {
 
     public ReceiptImageFrag() {

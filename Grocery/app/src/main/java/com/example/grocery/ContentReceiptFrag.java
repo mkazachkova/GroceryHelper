@@ -1,6 +1,7 @@
 package com.example.grocery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -79,7 +80,15 @@ public class ContentReceiptFrag extends Fragment {
                 Object listItem = receiptListView.getItemAtPosition(position);
                 System.out.println(listItem);
 
-                Fragment receiptImageFrag = new ReceiptImageFrag();
+                //start receiptImage activity
+
+//                Intent i=new Intent(ContentReceiptFrag.this, ReceiptImage.class);
+//                startActivity(i);
+
+                Intent intent = new Intent(getActivity(), ReceiptImage.class);
+                startActivity(intent);
+
+//                Fragment receiptImageFrag = new ReceiptImageFrag();
 
                 //EditLogFragment editLogFragment = new EditLogFragment();
                 //myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -92,10 +101,10 @@ public class ContentReceiptFrag extends Fragment {
                 //MainActivity.currID = position;
 
                 //transaction = getSupportFragmentManager().beginTransaction();
-                transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, receiptImageFrag);
-                transaction.addToBackStack(null);
-                transaction.commit();
+//                transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment_container, receiptImageFrag);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
 
 //                    getActivity().getFragmentManager().beginTransaction()
 //                            .replace(R.id.fragment_container, receiptImageFrag)
