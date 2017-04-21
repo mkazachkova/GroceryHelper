@@ -51,7 +51,8 @@
             android:gravity="center_horizontal"
             android:text="25.63"
             android:textColor="@color/colorAccent"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:inputType="numberDecimal"/>
 
     </LinearLayout>
 
