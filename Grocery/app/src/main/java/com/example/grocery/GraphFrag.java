@@ -24,6 +24,7 @@ public class GraphFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.statistics_calendar_fragment, container, false);
+        return inflater.inflate(R.layout.statistics_graph_fragment, container, false);
     }
+
 }

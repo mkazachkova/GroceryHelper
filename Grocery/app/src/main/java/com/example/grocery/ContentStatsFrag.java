@@ -23,15 +23,17 @@ public class ContentStatsFrag extends Fragment{
 
         // Inflate the layout for this fragment
         View view  = inflater.inflate(R.layout.statistics_main_fragment, container, false);
-        getActivity().setTitle("My Statistics");
+        getActivity().setTitle("Statistics");
 
         //bottom drawer for split toolbar
         BottomNavigationView botNavView = (BottomNavigationView) view.findViewById(R.id.stats_bottom_navigation);
+        botNavView.setItemIconTintList(null);
         botNavView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         Fragment selectedFragment = null;
+                        item.setChecked(true);
                         switch (item.getItemId()) {
                             case R.id.stats_calendar:
                                 selectedFragment = CalendarFrag.newInstance();
@@ -51,6 +53,7 @@ public class ContentStatsFrag extends Fragment{
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, CalendarFrag.newInstance());
         transaction.commit();
+
 
         return view;
     }

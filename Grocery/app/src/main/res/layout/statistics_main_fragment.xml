@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
+        app:itemTextColor="@drawable/bot_nav_selector"
         app:menu="@menu/stats_bottom_drawer"/>
 
 </RelativeLayout>
