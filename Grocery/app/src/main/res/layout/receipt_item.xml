@@ -14,9 +14,9 @@ android:layout_height="match_parent">
 
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/receipt_placeholder"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/receipt_pic"
         android:id="@+id/receipt_image"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter" />
@@ -36,8 +36,7 @@ android:layout_height="match_parent">
         android:textSize="24sp"
         android:textColor="@color/colorAccent"
         android:layout_marginLeft="7dp"
-        android:id="@+id/receipt_amt"
-        android:layout_weight="8" />
+        android:id="@+id/receipt_amt" />
 
     <TextView
         android:text="DATE"
@@ -47,15 +46,15 @@ android:layout_height="match_parent">
         android:textSize="24sp"
         android:textColor="@color/colorAccent"
         android:layout_marginLeft="7dp"
-        android:id="@+id/receipt_date"
-        android:layout_weight="8" />
+        android:id="@+id/receipt_date" />
 
 </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="20dp"
+        android:gravity="bottom"
+        android:layout_marginRight="50dp"
         android:layout_marginTop="10dp">
 
         <ImageView
@@ -64,6 +63,7 @@ android:layout_height="match_parent">
             app:srcCompat="@drawable/edit"
             android:id="@+id/receipt_edit"
             android:adjustViewBounds="true"
+            android:layout_gravity="end"
             android:scaleType="fitCenter" />
 
         <ImageView
@@ -72,6 +72,7 @@ android:layout_height="match_parent">
             app:srcCompat="@drawable/delete"
             android:id="@+id/receipt_delete"
             android:adjustViewBounds="true"
+            android:layout_gravity="end"
             android:scaleType="fitCenter" />
     </LinearLayout>
 

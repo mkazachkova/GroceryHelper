@@ -3,6 +3,7 @@ package com.example.grocery;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class ContentReceiptFrag extends Fragment {
     protected static ReceiptAdapter aa; //array adapter
     private Context context;
     private View rootView;
+    private FragmentTransaction transaction;
     //private SharedPreferences myPrefs;
 
 //    @Override
@@ -77,6 +79,8 @@ public class ContentReceiptFrag extends Fragment {
                 Object listItem = receiptListView.getItemAtPosition(position);
                 System.out.println(listItem);
 
+                Fragment receiptImageFrag = new ReceiptImageFrag();
+
                 //EditLogFragment editLogFragment = new EditLogFragment();
                 //myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
                 //myPrefs = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
@@ -87,11 +91,17 @@ public class ContentReceiptFrag extends Fragment {
 
                 //MainActivity.currID = position;
 
+                //transaction = getSupportFragmentManager().beginTransaction();
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, receiptImageFrag);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
 //                    getActivity().getFragmentManager().beginTransaction()
-//                            .replace(R.id.content_frame, editLogFragment)
+//                            .replace(R.id.fragment_container, receiptImageFrag)
 //                            .addToBackStack(null)
 //                            .commit();
-//                    getActivity().setTitle("Edit Log");
+//                    getActivity().setTitle("Receipt");
             }
         });
 
@@ -121,7 +131,7 @@ public class ContentReceiptFrag extends Fragment {
         aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
         receiptListView.setAdapter(aa);
 
-        getActivity().setTitle("Receipts!");
+        getActivity().setTitle("Receipts");
 
     }
 
@@ -129,8 +139,8 @@ public class ContentReceiptFrag extends Fragment {
         ArrayList<Receipt> rList = new ArrayList<Receipt>();
 
         float[] amount = new float[2];
-        amount[0] = (float) 15.2;
-        amount[1] = (float) 37.5;
+        amount[0] = (float) 15.265;
+        amount[1] = (float) 37.5333;
 
         long[] date = new long[2];
 

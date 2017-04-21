@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 /**
  * Created by Kiki on 4/20/17. Array Adapter receipt
  */
@@ -45,13 +45,33 @@ public class ReceiptAdapter extends ArrayAdapter<Receipt> {
         TextView receiptDate = (TextView) logView.findViewById(R.id.receipt_date);
         ImageView receiptImage = (ImageView) logView.findViewById(R.id.receipt_image);
 
+        ImageView edit = (ImageView)logView.findViewById(R.id.receipt_edit);
+        ImageView delete = (ImageView)logView.findViewById(R.id.receipt_delete);
+
+
+        //TODO: set onclick for edit and delete
+       // edit.setOnClickListener(new .OnItemClickListener());
+
+//        receiptListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Object listItem = receiptListView.getItemAtPosition(position);
+//                System.out.println(listItem);
+
+
+
+
 
 //        TextView dateHours = (TextView) logView.findViewById(R.i);
 //        ImageView roadTypeImage = (ImageView) logView.findViewById(R.id.road_image);
 //        ImageView weatherImage = (ImageView) logView.findViewById(R.id.weather_image);
 
         //convert date (long) back to string
-        String date = new Date(receipt.getDate()).toString();
+        Long d = receipt.getDate();
+
+        String date = new SimpleDateFormat("MM/dd/yyyy").format(new Date(d));
+
+        //String date = new Date(d).toString();
         receiptDate.setText(date);
         amount.setText(String.format("%.2f", receipt.getAmount()));
 
@@ -61,5 +81,6 @@ public class ReceiptAdapter extends ArrayAdapter<Receipt> {
 
         return logView;
     }
+
 
 }
