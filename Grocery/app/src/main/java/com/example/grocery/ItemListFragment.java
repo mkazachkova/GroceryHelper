@@ -53,6 +53,9 @@ public class ItemListFragment extends Fragment {
         //get our list view
         shoppingListView = (ListView) view.findViewById(R.id.itemsList);
 
+
+
+
         shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -121,13 +124,31 @@ public class ItemListFragment extends Fragment {
 
         populateMyItems();
 
-        ShoppingListAdapter listViewAdapter = new ShoppingListAdapter(
+        final ShoppingListAdapter listViewAdapter = new ShoppingListAdapter(
                 getActivity(),
                 R.layout.single_item,
                 myItems
         );
 
         listView.setAdapter(listViewAdapter);
+
+
+        shoppingListView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeTop() {
+                Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeRight() {
+                Toast.makeText(getActivity(), "right", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeLeft() {
+                Toast.makeText(getActivity(), "You have swiped left!", Toast.LENGTH_SHORT).show();
+                listViewAdapter.remove(listViewAdapter.getItem(0));
+                listViewAdapter.notifyDataSetChanged();
+            }
+            public void onSwipeBottom() {
+                Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
