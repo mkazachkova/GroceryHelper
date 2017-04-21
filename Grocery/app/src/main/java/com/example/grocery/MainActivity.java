@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_list) {
-
+            fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -258,16 +259,19 @@ public class MainActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
         } else if (id == R.id.nav_receipts) {
+            fab.setVisibility(View.VISIBLE);
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, receiptsFrag);
             transaction.addToBackStack(null);
             transaction.commit();
         } else if (id == R.id.nav_statistics) {
+            fab.setVisibility(View.GONE);
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, statsFrag);
             transaction.addToBackStack(null);
             transaction.commit();
         } else if (id == R.id.nav_expiration) {
+            fab.setVisibility(View.VISIBLE);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
