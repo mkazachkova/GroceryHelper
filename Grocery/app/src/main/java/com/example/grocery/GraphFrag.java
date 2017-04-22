@@ -24,6 +24,8 @@ public class GraphFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //BarChart chart = new BarChart(context);
+        //setContentView(chart);
         return inflater.inflate(R.layout.statistics_graph_fragment, container, false);
     }
 
