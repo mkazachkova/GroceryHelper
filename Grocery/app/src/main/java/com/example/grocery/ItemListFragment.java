@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,8 @@ public class ItemListFragment extends Fragment {
     protected static ArrayList<ShoppingItem> myItems;
     private MyShoppingListDBAdapter dbAdapt;
     protected ShoppingAdapter shopAdapt;
+    private AlertDialog b;
+    private View view2;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -52,15 +55,16 @@ public class ItemListFragment extends Fragment {
         toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
         toast.show();
 
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        view2 = inflater.inflate(R.layout.fragment_item_list, container, false);
         getActivity().setTitle("My Shopping List");
 
         final FragmentActivity act = this.getActivity();
+        final Fragment frag = this;
 
 
 
         //get our list view
-        shoppingListView = (ListView) view.findViewById(R.id.itemsList);
+        shoppingListView = (ListView) view2.findViewById(R.id.itemsList);
         myItems = new ArrayList<ShoppingItem>();
         shopAdapt = new ShoppingAdapter(getActivity().getApplicationContext(), R.layout.single_item, myItems);
         shoppingListView.setAdapter(shopAdapt);
@@ -69,13 +73,54 @@ public class ItemListFragment extends Fragment {
 
         shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
+                Object shoppingItem = shoppingListView.getItemAtPosition(position);
+               // Object shoppingItem = dbAdapt.getItem(id);
+                ShoppingItem castItem = (ShoppingItem) shoppingItem;
+                String idString = castItem.getID();
+
+
+                System.out.println(castItem.getName());
+                System.out.println(castItem.getDays());
+                System.out.println(castItem.getQuantity());
+                System.out.println("string id: " + idString);
+
+                final long whyId = Long.parseLong(idString);
+
+
+
+               // final long whyId = id;
+
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater =  getActivity().getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                 dialogBuilder.setView(dialogView);
 
-               // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+                final EditText edt = (EditText) dialogView.findViewById(R.id.editTitle);
+                edt.setText(castItem.getName());
+
+
+
+
+                final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+
+                final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
+                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
+                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                quantitySpinner.setAdapter(quanAdapter);
+                quantitySpinner.setSelection(castItem.getQuantity() - 1);
+
+
+
+                final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+
+                final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(act,
+                        R.array.reminderTypes,android.R.layout.simple_spinner_item);
+                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                reminderSpinner.setAdapter(remindAdapter);
+                reminderSpinner.setSelection(castItem.getDays());
 
                 Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                 delete.setOnClickListener(new View.OnClickListener(){
@@ -85,8 +130,18 @@ public class ItemListFragment extends Fragment {
                         CharSequence text = "Delete Pressed!";
                         int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                      //  Toast toast = Toast.makeText(context, text, duration);
+                      //  toast.show();
+                        dbAdapt.removeItem(whyId);
+
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(frag).attach(frag).commit();
+                       // shoppingListView = (ListView) view2.findViewById(R.id.itemsList);
+                       // myItems = new ArrayList<ShoppingItem>();
+                       // shopAdapt = new ShoppingAdapter(getActivity().getApplicationContext(), R.layout.single_item, myItems);
+                       // shoppingListView.setAdapter(shopAdapt);
+                       // updateArray();
+                        b.dismiss();
                     }
                 });
 
@@ -98,40 +153,41 @@ public class ItemListFragment extends Fragment {
                         CharSequence text = "Save pressed!";
                         int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                        String editedTitle = edt.getText().toString();
+                        int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+                        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+
+
+                        System.out.println(editedTitle);
+                        System.out.println(quantity);
+                        System.out.println(reminder);
+
+
+                        dbAdapt.updateField(whyId,1,editedTitle);
+                        dbAdapt.updateField(whyId,2,quantity+"");
+                        dbAdapt.updateField(whyId,3,reminder+"");
+                        System.out.println(whyId);
+                       // Toast toast = Toast.makeText(context, text, duration);
+                       // toast.show();
+
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(frag).attach(frag).commit();
+                        //shoppingListView = (ListView) view2.findViewById(R.id.itemsList);
+                        //myItems = new ArrayList<ShoppingItem>();
+                        //shopAdapt = new ShoppingAdapter(getActivity().getApplicationContext(), R.layout.single_item, myItems);
+                        //shoppingListView.setAdapter(shopAdapt);
+                        //updateArray();
+                        b.dismiss();
                     }
                 });
 
-
-                Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-
-                final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                quantitySpinner.setAdapter(quanAdapter);
-                quantitySpinner.setSelection(0);
-
-
-
-                Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-
-                final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.reminderTypes,android.R.layout.simple_spinner_item);
-                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                reminderSpinner.setAdapter(remindAdapter);
-                reminderSpinner.setSelection(0);
-
-
-                AlertDialog b = dialogBuilder.create();
+                b = dialogBuilder.create();
                 b.show();
             }
         });
 
 
-        ListView listView = (ListView) view.findViewById(R.id.itemsList);
+        ListView listView = (ListView) view2.findViewById(R.id.itemsList);
 
      //   populateMyItems();
 
@@ -161,7 +217,7 @@ public class ItemListFragment extends Fragment {
             }
         });
 
-        return view;
+        return view2;
     }
     /*
     public void populateMyItems() {
@@ -193,7 +249,7 @@ public class ItemListFragment extends Fragment {
         myItems.clear();
         if (curse.moveToFirst())
             do {
-                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)));
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4));
                 myItems.add(0, result);  // puts in reverse order
             } while (curse.moveToNext());
 

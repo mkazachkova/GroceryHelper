@@ -8,11 +8,13 @@ public class ShoppingItem {
     public String name;
     public int quantity;
     public int reminderDays;
+    public String ID;
 
-    public ShoppingItem(String name, int quantity, int reminderDays) {
+    public ShoppingItem(String name, int quantity, int reminderDays , String ID) {
         this.name = name;
         this.quantity = quantity;
         this.reminderDays = reminderDays;
+        this.ID = ID;
     }
 
     public String getName() {
@@ -25,6 +27,10 @@ public class ShoppingItem {
 
     public int getQuantity() {
         return this.quantity;
+    }
+
+    public String getID() {
+        return this.ID;
     }
 
 }

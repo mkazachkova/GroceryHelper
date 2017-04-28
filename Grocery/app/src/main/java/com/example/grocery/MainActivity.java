@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         dbAdapt = MyShoppingListDBAdapter.getInstance(MainActivity.this);
+       // dbAdapt.clear();
         dbAdapt.open();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -114,8 +115,13 @@ public class MainActivity extends AppCompatActivity
                             toast2.show();
                         } else {
                             System.out.println("should be adding to database");
-                            ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder);
-                            dbAdapt.insertItem(temp);
+                            ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder, "");
+                            long id = dbAdapt.insertItem(temp);
+                            System.out.println("this is the returned id: " + id);
+                            boolean suc = dbAdapt.updateField(id, 4, id+"");
+                            System.out.println(suc);
+                            ShoppingItem t = dbAdapt.getItem(id);
+                            System.out.println("the iID here is: " + t.getID());
                             b.dismiss();
 
                             transaction = getSupportFragmentManager().beginTransaction();
@@ -284,8 +290,13 @@ public class MainActivity extends AppCompatActivity
                             } else {
                                 System.out.println("should be adding to database");
                                 System.out.println(newTitle);
-                                ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder);
-                                dbAdapt.insertItem(temp);
+                                ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder,"");
+                                long id = dbAdapt.insertItem(temp);
+                                System.out.println("this is the returned id: " + id);
+                                boolean suc = dbAdapt.updateField(id, 4, id+"");
+                                System.out.println(suc);
+                                ShoppingItem t = dbAdapt.getItem(id);
+                                System.out.println("the iID here is: " + t.getID());
                                 b.dismiss();
                                 transaction = getSupportFragmentManager().beginTransaction();
                               //  transaction.replace(R.id.fragment_container, itemFragment);

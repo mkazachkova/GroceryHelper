@@ -41,7 +41,7 @@ public class ContentExpirationFrag extends Fragment {
 
         expirationListView = (ListView) view.findViewById(R.id.itemsList);
 
-        populateItems();
+       // populateItems();
 
         ExpirationListAdapter listViewAdapter = new ExpirationListAdapter(
                 getActivity(),
@@ -194,7 +194,7 @@ public class ContentExpirationFrag extends Fragment {
         Log.d ("Content Fragment", "onDetach");
         super.onDetach();
     }
-
+/*
     public void populateItems() {
         ShoppingItem one = new ShoppingItem("Chicken breast", 1, 3);
         ShoppingItem two = new ShoppingItem("Salmon", 1, 2);
@@ -208,5 +208,5 @@ public class ContentExpirationFrag extends Fragment {
         myItems.add(two);
         myItems.add(four);
 
-    }
+    }*/
 }

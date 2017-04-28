@@ -28,8 +28,9 @@ public class MyShoppingListDBAdapter {
     public static final String ITEM_NAME = "item_name";
     public static final String ITEM_REMINDER_DAYS = "item_reminder_days";
     public static final String ITEM_QUANTITY = "item_quantity";
+    public static final String ITEM_STRING_ID = "item_string_id";
 
-    public static final String[] ITEM_COLS = {ITEM_ID, ITEM_NAME, ITEM_QUANTITY, ITEM_REMINDER_DAYS};
+    public static final String[] ITEM_COLS = {ITEM_ID, ITEM_NAME, ITEM_QUANTITY, ITEM_REMINDER_DAYS, ITEM_STRING_ID};
 
     public static synchronized MyShoppingListDBAdapter getInstance(Context context) {
         if (dbInstance == null) {
@@ -67,6 +68,7 @@ public class MyShoppingListDBAdapter {
         cvalues.put(ITEM_NAME, it.getName());
         cvalues.put(ITEM_REMINDER_DAYS, it.getDays());
         cvalues.put(ITEM_QUANTITY, it.getQuantity());
+        cvalues.put(ITEM_STRING_ID, it.getID());
         // add to course table in database
         return db.insert(ITEMS_TABLE, null, cvalues);
     }
@@ -103,7 +105,8 @@ public class MyShoppingListDBAdapter {
         int index1 = cursor.getColumnIndex(ITEM_NAME);
         int index2 = cursor.getColumnIndex(ITEM_REMINDER_DAYS);
         int index3 = cursor.getColumnIndex(ITEM_QUANTITY);
-        return new ShoppingItem(cursor.getString(index1), Integer.parseInt(cursor.getString(index3)), Integer.parseInt(cursor.getString(index2)));
+        int index4 = cursor.getColumnIndex(ITEM_STRING_ID);
+        return new ShoppingItem(cursor.getString(index1), Integer.parseInt(cursor.getString(index3)), Integer.parseInt(cursor.getString(index2)), cursor.getString(index4));
     }
 
 
@@ -114,7 +117,7 @@ public class MyShoppingListDBAdapter {
 
         // SQL statement to create a new database
         private static final String DB_CREATE = "CREATE TABLE " + ITEMS_TABLE
-                + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ITEM_NAME + " TEXT, " +  ITEM_QUANTITY + " TEXT, " +  ITEM_REMINDER_DAYS + " TEXT);";
+                + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ITEM_NAME + " TEXT, " +  ITEM_QUANTITY + " TEXT, " +  ITEM_REMINDER_DAYS + " TEXT, " + ITEM_STRING_ID + " Text);";
 
         public MyDBhelper(Context context, String name, SQLiteDatabase.CursorFactory fct, int version) {
             super(context, name, fct, version);
