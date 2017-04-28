@@ -23,4 +23,8 @@ public class ShoppingItem {
         return this.reminderDays;
     }
 
+    public int getQuantity() {
+        return this.quantity;
+    }
+
 }

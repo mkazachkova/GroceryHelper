@@ -2,6 +2,7 @@ package com.example.grocery;
 
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -28,6 +29,8 @@ public class ItemListFragment extends Fragment {
 
     private ListView shoppingListView;
     protected static ArrayList<ShoppingItem> myItems;
+    private MyShoppingListDBAdapter dbAdapt;
+    protected ShoppingAdapter shopAdapt;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -41,6 +44,10 @@ public class ItemListFragment extends Fragment {
         CharSequence text = "Swipe left when you place an item in your cart!";
         int duration = Toast.LENGTH_SHORT;
 
+        dbAdapt = MyShoppingListDBAdapter.getInstance(getActivity().getApplicationContext());
+       // dbAdapt.clear();
+        dbAdapt.open();
+
         Toast toast = Toast.makeText(context, text, duration);
         toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
         toast.show();
@@ -50,10 +57,14 @@ public class ItemListFragment extends Fragment {
 
         final FragmentActivity act = this.getActivity();
 
+
+
         //get our list view
         shoppingListView = (ListView) view.findViewById(R.id.itemsList);
-
-
+        myItems = new ArrayList<ShoppingItem>();
+        shopAdapt = new ShoppingAdapter(getActivity().getApplicationContext(), R.layout.single_item, myItems);
+        shoppingListView.setAdapter(shopAdapt);
+        updateArray();
 
 
         shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -122,7 +133,7 @@ public class ItemListFragment extends Fragment {
 
         ListView listView = (ListView) view.findViewById(R.id.itemsList);
 
-        populateMyItems();
+     //   populateMyItems();
 
         final ShoppingListAdapter listViewAdapter = new ShoppingListAdapter(
                 getActivity(),
@@ -152,8 +163,7 @@ public class ItemListFragment extends Fragment {
 
         return view;
     }
-
-
+    /*
     public void populateMyItems() {
 
         myItems = new ArrayList<ShoppingItem>();
@@ -175,6 +185,19 @@ public class ItemListFragment extends Fragment {
         myItems.add(five);
         myItems.add(two);
 
+    }*/
+
+
+    public void updateArray() {
+        Cursor curse = dbAdapt.getAllItems();
+        myItems.clear();
+        if (curse.moveToFirst())
+            do {
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)));
+                myItems.add(0, result);  // puts in reverse order
+            } while (curse.moveToNext());
+
+        shopAdapt.notifyDataSetChanged();
     }
 }
 

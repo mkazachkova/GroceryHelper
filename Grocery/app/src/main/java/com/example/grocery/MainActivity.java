@@ -24,7 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import android.support.v7.app.AlertDialog;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity
     private Fragment statsFrag;
     private Fragment settingsFrag;
     private FragmentTransaction transaction;
+    private Spinner quantitySpinner;
+    private Spinner reminderSpinner;
+    private MyShoppingListDBAdapter dbAdapt;
+    private AlertDialog b;
 
     private static ItemListFragment itemFragment = new ItemListFragment();
     FloatingActionButton fab;
@@ -47,17 +51,21 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        dbAdapt = MyShoppingListDBAdapter.getInstance(MainActivity.this);
+        dbAdapt.open();
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater inflater =  getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                 dialogBuilder.setView(dialogView);
 
-                EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
+                final EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
                 title.setText("");
                 title.setHint("Enter Item Name");
 
@@ -67,7 +75,7 @@ public class MainActivity extends AppCompatActivity
 
                 Button save = (Button) dialogView.findViewById(R.id.btn_save);
 
-
+                final AlertDialog dialog = dialogBuilder.create();
 
                 delete.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view)
@@ -78,6 +86,7 @@ public class MainActivity extends AppCompatActivity
 
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
+                        b.dismiss();
                     }
                 });
 
@@ -89,12 +98,38 @@ public class MainActivity extends AppCompatActivity
                         CharSequence text = "Save pressed!";
                         int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                      //  Toast toast = Toast.makeText(context, text, duration);
+                       // toast.show();
+
+                        String newTitle = title.getText().toString();
+                        int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+                        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+
+                        if (newTitle.equals("")) {
+                            Context context2 = MainActivity.this;
+                            CharSequence text2 = "Must enter item name in order to save item";
+                            int duration2 = Toast.LENGTH_SHORT;
+
+                            Toast toast2 = Toast.makeText(context2, text2, duration2);
+                            toast2.show();
+                        } else {
+                            System.out.println("should be adding to database");
+                            ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder);
+                            dbAdapt.insertItem(temp);
+                            b.dismiss();
+
+                            transaction = getSupportFragmentManager().beginTransaction();
+                         //   transaction.replace(R.id.fragment_container, itemFragment);
+                            transaction.detach(itemFragment);
+                            transaction.attach(itemFragment);
+                            //transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+
                     }
                 });
 
-                Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+                quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
 
                 final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                         R.array.quantityTypes,android.R.layout.simple_spinner_item);
@@ -105,7 +140,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-                Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+                reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
 
                 final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                         R.array.reminderTypes,android.R.layout.simple_spinner_item);
@@ -115,8 +150,8 @@ public class MainActivity extends AppCompatActivity
                 reminderSpinner.setSelection(0);
 
 
-                dialogBuilder.show();
-
+                b = dialogBuilder.create();
+                b.show();
             }
         });
 
@@ -193,13 +228,16 @@ public class MainActivity extends AppCompatActivity
                     final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                     dialogBuilder.setView(dialogView);
 
-                    EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
+                    final EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
                     title.setText("");
                     title.setHint("Enter Item Name");
 
                     Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                     delete.setText("Cancel");
                     delete.setBackgroundColor(Color.GRAY);
+
+                    final AlertDialog dialog = dialogBuilder.create();
+
 
                     delete.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
@@ -210,11 +248,15 @@ public class MainActivity extends AppCompatActivity
 
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
+
+                            b.dismiss();
                         }
                     });
 
 
                     Button save = (Button) dialogView.findViewById(R.id.btn_save);
+                    final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+                    final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
                     //save.setGravity(Gravity.RIGHT);
 
                     save.setOnClickListener(new View.OnClickListener(){
@@ -226,10 +268,37 @@ public class MainActivity extends AppCompatActivity
 
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
+
+
+                            String newTitle = title.getText().toString();
+                            int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+                            int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+
+                            if (newTitle.equals("")) {
+                                Context context2 = MainActivity.this;
+                                CharSequence text2 = "Must enter item name in order to save item";
+                                int duration2 = Toast.LENGTH_SHORT;
+
+                                Toast toast2 = Toast.makeText(context2, text2, duration2);
+                                toast2.show();
+                            } else {
+                                System.out.println("should be adding to database");
+                                System.out.println(newTitle);
+                                ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder);
+                                dbAdapt.insertItem(temp);
+                                b.dismiss();
+                                transaction = getSupportFragmentManager().beginTransaction();
+                              //  transaction.replace(R.id.fragment_container, itemFragment);
+                                transaction.detach(itemFragment);
+                                transaction.attach(itemFragment);
+                              //  transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
+
                         }
                     });
 
-                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+
 
                     final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                             R.array.quantityTypes,android.R.layout.simple_spinner_item);
@@ -240,7 +309,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-                    Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+
 
                     final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                             R.array.reminderTypes,android.R.layout.simple_spinner_item);
@@ -249,7 +318,8 @@ public class MainActivity extends AppCompatActivity
                     reminderSpinner.setAdapter(remindAdapter);
                     reminderSpinner.setSelection(0);
 
-                    dialogBuilder.show();
+                    b = dialogBuilder.create();
+                    b.show();
 
                 }
             });
@@ -281,6 +351,8 @@ public class MainActivity extends AppCompatActivity
                     dialogBuilder.setView(dialogView);
 
                     // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+
+                    final AlertDialog dialog = dialogBuilder.create();
 
                     Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                     delete.setOnClickListener(new View.OnClickListener(){
