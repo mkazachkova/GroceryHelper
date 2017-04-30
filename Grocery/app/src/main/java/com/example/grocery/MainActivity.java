@@ -2,6 +2,7 @@ package com.example.grocery;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import android.support.v7.app.AlertDialog;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,9 +38,27 @@ public class MainActivity extends AppCompatActivity
     private Fragment statsFrag;
     private Fragment settingsFrag;
     private FragmentTransaction transaction;
+    private Spinner quantitySpinner;
+    private Spinner reminderSpinner;
+    private MyShoppingListDBAdapter dbAdapt;
+    private AlertDialog b;
 
     private static ItemListFragment itemFragment = new ItemListFragment();
     FloatingActionButton fab;
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CharSequence text = "Swipe left when you place an item in your cart!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(MainActivity.this, text, duration);
+        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +67,32 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        CharSequence text = "Swipe left when you place an item in your cart!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(MainActivity.this, text, duration);
+        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+
+        dbAdapt = MyShoppingListDBAdapter.getInstance(MainActivity.this);
+//       dbAdapt.clear();
+        dbAdapt.open();
+
+       // dbAdaptExp = MyExpirationListDBAdapter.getInstance(MainActivity.this);
+        //dbAdaptExp.open();
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater inflater =  getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                 dialogBuilder.setView(dialogView);
 
-                EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
+                final EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
                 title.setText("");
                 title.setHint("Enter Item Name");
 
@@ -67,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
                 Button save = (Button) dialogView.findViewById(R.id.btn_save);
 
-
+                final AlertDialog dialog = dialogBuilder.create();
 
                 delete.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view)
@@ -78,6 +113,7 @@ public class MainActivity extends AppCompatActivity
 
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
+                        b.dismiss();
                     }
                 });
 
@@ -89,12 +125,52 @@ public class MainActivity extends AppCompatActivity
                         CharSequence text = "Save pressed!";
                         int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                      //  Toast toast = Toast.makeText(context, text, duration);
+                       // toast.show();
+
+                        String newTitle = title.getText().toString();
+                        int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+                        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+
+                        if (newTitle.equals("")) {
+                            Context context2 = MainActivity.this;
+                            CharSequence text2 = "Must enter item name in order to save item";
+                            int duration2 = Toast.LENGTH_SHORT;
+
+                            Toast toast2 = Toast.makeText(context2, text2, duration2);
+                            toast2.show();
+                        } else {
+                            System.out.println("should be adding to database");
+
+                            String returned = checkIfExists(newTitle);
+                            if (returned.equals("")) {
+                                ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder, "", true);
+                                long id = dbAdapt.insertItem(temp);
+                                System.out.println("this is the returned id: " + id);
+                                boolean suc = dbAdapt.updateField(id, 4, id+"");
+                                System.out.println(suc);
+                                ShoppingItem t = dbAdapt.getItem(id);
+                                System.out.println("the iID here is: " + t.getID());
+                                System.out.println("this is the returned status: " + t.inList());
+                            } else {
+                                dbAdapt.updateField(Long.parseLong(returned), 2, quantity+"");
+                                dbAdapt.updateField(Long.parseLong(returned), 5, true+"");
+                            }
+
+                            b.dismiss();
+
+                            transaction = getSupportFragmentManager().beginTransaction();
+                         //   transaction.replace(R.id.fragment_container, itemFragment);
+                            transaction.detach(itemFragment);
+                            transaction.attach(itemFragment);
+                            //transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+
                     }
                 });
 
-                Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+                quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
 
                 final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                         R.array.quantityTypes,android.R.layout.simple_spinner_item);
@@ -105,7 +181,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-                Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+                reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
 
                 final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                         R.array.reminderTypes,android.R.layout.simple_spinner_item);
@@ -115,8 +191,8 @@ public class MainActivity extends AppCompatActivity
                 reminderSpinner.setSelection(0);
 
 
-                dialogBuilder.show();
-
+                b = dialogBuilder.create();
+                b.show();
             }
         });
 
@@ -193,13 +269,16 @@ public class MainActivity extends AppCompatActivity
                     final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                     dialogBuilder.setView(dialogView);
 
-                    EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
+                    final EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
                     title.setText("");
                     title.setHint("Enter Item Name");
 
                     Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                     delete.setText("Cancel");
                     delete.setBackgroundColor(Color.GRAY);
+
+                    final AlertDialog dialog = dialogBuilder.create();
+
 
                     delete.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
@@ -210,11 +289,15 @@ public class MainActivity extends AppCompatActivity
 
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
+
+                            b.dismiss();
                         }
                     });
 
 
                     Button save = (Button) dialogView.findViewById(R.id.btn_save);
+                    final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+                    final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
                     //save.setGravity(Gravity.RIGHT);
 
                     save.setOnClickListener(new View.OnClickListener(){
@@ -226,10 +309,50 @@ public class MainActivity extends AppCompatActivity
 
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
+
+
+                            String newTitle = title.getText().toString();
+                            int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+                            int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+
+                            if (newTitle.equals("")) {
+                                Context context2 = MainActivity.this;
+                                CharSequence text2 = "Must enter item name in order to save item";
+                                int duration2 = Toast.LENGTH_SHORT;
+
+                                Toast toast2 = Toast.makeText(context2, text2, duration2);
+                                toast2.show();
+                            } else {
+                                System.out.println("should be adding to database");
+                                String returned = checkIfExists(newTitle);
+                                System.out.println("this is returned: " + returned);
+                                if (returned.equals("")) {
+                                    ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder, "", true);
+                                    long id = dbAdapt.insertItem(temp);
+                                    System.out.println("this is the returned id: " + id);
+                                    boolean suc = dbAdapt.updateField(id, 4, id+"");
+                                    System.out.println(suc);
+                                    ShoppingItem t = dbAdapt.getItem(id);
+                                    System.out.println("the iID here is: " + t.getID());
+                                    System.out.println("this is the returned status: " + t.inList());
+                                } else {
+                                    dbAdapt.updateField(Long.parseLong(returned), 2, quantity+"");
+                                    dbAdapt.updateField(Long.parseLong(returned), 5, true+"");
+                                }
+
+                                b.dismiss();
+                                transaction = getSupportFragmentManager().beginTransaction();
+                              //  transaction.replace(R.id.fragment_container, itemFragment);
+                                transaction.detach(itemFragment);
+                                transaction.attach(itemFragment);
+                              //  transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
+
                         }
                     });
 
-                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+
 
                     final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                             R.array.quantityTypes,android.R.layout.simple_spinner_item);
@@ -240,8 +363,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-                    Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-
                     final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                             R.array.reminderTypes,android.R.layout.simple_spinner_item);
                     remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -249,7 +370,8 @@ public class MainActivity extends AppCompatActivity
                     reminderSpinner.setAdapter(remindAdapter);
                     reminderSpinner.setSelection(0);
 
-                    dialogBuilder.show();
+                    b = dialogBuilder.create();
+                    b.show();
 
                 }
             });
@@ -282,21 +404,47 @@ public class MainActivity extends AppCompatActivity
 
                     // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
+                    final AlertDialog dialog = dialogBuilder.create();
+
+
+                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+                    quantitySpinner.setVisibility(View.GONE);
+
+                /*final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
+                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
+                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                quantitySpinner.setAdapter(quanAdapter);
+                quantitySpinner.setSelection(0);*/
+
+
+
+                    final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+
+                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+                            R.array.quantityTypes,android.R.layout.simple_spinner_item);
+                    remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    reminderSpinner.setAdapter(remindAdapter);
+                    reminderSpinner.setSelection(0);
+
                     Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                     delete.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
                         {
-                            Context context = MainActivity.this;
-                            CharSequence text = "Delete Pressed!";
-                            int duration = Toast.LENGTH_SHORT;
+                          //  Context context = MainActivity.this;
+                           // CharSequence text = "Delete Pressed!";
+                            //int duration = Toast.LENGTH_SHORT;
 
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
+                        //    Toast toast = Toast.makeText(context, text, duration);
+                        //    toast.show();
+                            b.dismiss();
                         }
                     });
 
                     TextView quantity = (TextView) dialogView.findViewById(R.id.textView);
-                    EditText name = (EditText) dialogView.findViewById(R.id.editTitle);
+                    final EditText name = (EditText) dialogView.findViewById(R.id.editTitle);
+
                     name.setText("");
                     name.setHint("Enter Item Name");
                     quantity.setVisibility(View.GONE);
@@ -312,33 +460,52 @@ public class MainActivity extends AppCompatActivity
 
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
+
+
+                            int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+                            String newTitle = name.getText().toString();
+
+
+                            if (newTitle.equals("")) {
+                                Context context2 = MainActivity.this;
+                                CharSequence text2 = "Must enter item name in order to save item";
+                                int duration2 = Toast.LENGTH_SHORT;
+
+                                Toast toast2 = Toast.makeText(context2, text2, duration2);
+                                toast2.show();
+                            } else {
+                                String returned = checkIfExists(newTitle);
+                                if (returned.equals("")) {
+                                    System.out.println("should be adding to database");
+                                    System.out.println(newTitle);
+                                    ShoppingItem temp = new ShoppingItem(newTitle, 0,reminder,"", false);
+                                    long id = dbAdapt.insertItem(temp);
+                                     System.out.println("this is the returned id: " + id);
+                                    boolean suc = dbAdapt.updateField(id, 4, id+"");
+                                    System.out.println(suc);
+                                    ShoppingItem t = dbAdapt.getItem(id);
+                                    System.out.println("the iID here is: " + t.getID());
+                                } else {
+                                    dbAdapt.updateField(Long.parseLong(returned), 3, reminder+"");
+                                }
+
+
+
+                                b.dismiss();
+                                transaction = getSupportFragmentManager().beginTransaction();
+                                //  transaction.replace(R.id.fragment_container, itemFragment);
+                                transaction.detach(expirationFrag);
+                                transaction.attach(expirationFrag);
+                                //  transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
+
+
                         }
                     });
 
 
-                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-                    quantitySpinner.setVisibility(View.GONE);
-
-                /*final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                quantitySpinner.setAdapter(quanAdapter);
-                quantitySpinner.setSelection(0);*/
-
-
-
-                    Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-
-                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-                            R.array.reminderTypes,android.R.layout.simple_spinner_item);
-                    remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                    reminderSpinner.setAdapter(remindAdapter);
-                    reminderSpinner.setSelection(0);
-
-
-                    AlertDialog b = dialogBuilder.create();
+                    b = dialogBuilder.create();
                     b.show();
                 }
             });
@@ -355,5 +522,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //public FloatingActionButton
+    public String checkIfExists(String name) {
+        Cursor curse = dbAdapt.getAllItems();
+        //  myItems.clear();
+        if (curse.moveToFirst())
+            do {
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                if (result.getName().equalsIgnoreCase(name)) { //only add if has reminder day set for it
+                    return result.getID();  // puts in reverse order
+                }
+            } while (curse.moveToNext());
+        return "";
+        // shopAdapt.notifyDataSetChanged();
+    }
+
 }

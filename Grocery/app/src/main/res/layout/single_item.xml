@@ -13,7 +13,7 @@
         android:layout_gravity="center_vertical"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/apple_red_icon" />
+        app:srcCompat="@drawable/list_img" />
 
 
     <TextView
