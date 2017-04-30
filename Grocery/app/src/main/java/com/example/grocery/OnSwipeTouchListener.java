@@ -7,13 +7,21 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ListView;
 
 public class OnSwipeTouchListener implements OnTouchListener {
 
     private final GestureDetector gestureDetector;
+    private ShoppingListAdapter adapt;
+    private ListView list;
+    private ShoppingItem curr;
 
-    public OnSwipeTouchListener(FragmentActivity activity){
+    public OnSwipeTouchListener(FragmentActivity activity, ShoppingListAdapter adapt, ListView list){
         gestureDetector = new GestureDetector(activity, new GestureListener());
+        this.adapt = adapt;
+        this.list = list;
+        this.curr = null;
+
     }
 
     @Override
@@ -37,6 +45,11 @@ public class OnSwipeTouchListener implements OnTouchListener {
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
+
+                int id = list.pointToPosition((int) e1.getX(), (int) e1.getY());
+                curr = adapt.getItem(id); //sets the curr item to the item that was just slid
+
+
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
@@ -72,5 +85,9 @@ public class OnSwipeTouchListener implements OnTouchListener {
     }
 
     public void onSwipeBottom() {
+    }
+
+    public ShoppingItem getItemFromSwipe() {
+        return this.curr;
     }
 }

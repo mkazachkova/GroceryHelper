@@ -208,7 +208,9 @@ public class ItemListFragment extends Fragment {
         listView.setAdapter(listViewAdapter);
 
 
-        shoppingListView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+      //  OnSwipeTouchListener x = new OnSwipeTouchListener(getActivity(),listViewAdapter,listView);
+
+        shoppingListView.setOnTouchListener(new OnSwipeTouchListener(getActivity(),listViewAdapter,listView) {
             public void onSwipeTop() {
                 Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
             }
@@ -216,9 +218,23 @@ public class ItemListFragment extends Fragment {
                 Toast.makeText(getActivity(), "right", Toast.LENGTH_SHORT).show();
             }
             public void onSwipeLeft() {
-                Toast.makeText(getActivity(), "You have swiped left!", Toast.LENGTH_SHORT).show();
-                listViewAdapter.remove(listViewAdapter.getItem(0));
-                listViewAdapter.notifyDataSetChanged();
+                ShoppingItem swiped = getItemFromSwipe();
+                String id = swiped.getID();
+               ShoppingItem temp =  dbAdapt.getItem(Long.parseLong(id));
+               // listViewAdapter.notifyDataSetChanged();
+
+                if (temp.reminderDays >= 1) {
+                    dbAdapt.updateField(Long.parseLong(id),5,false+""); //represents that is no longer in shopping list
+                } else {
+                    dbAdapt.removeItem(Long.parseLong(id));
+                }
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(frag).attach(frag).commit();
+
+          //      Toast.makeText(getActivity(), "You have swiped left!", Toast.LENGTH_SHORT).show();
+           //     listViewAdapter.remove(listViewAdapter.getItem(0));
+            //    listViewAdapter.notifyDataSetChanged();
             }
             public void onSwipeBottom() {
                 Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
@@ -265,6 +281,12 @@ public class ItemListFragment extends Fragment {
 
         Collections.sort(myItems);
         shopAdapt.notifyDataSetChanged();
+    }
+
+    public int DetailClick(View v) {
+        ListView lv = (ListView) view2.findViewById(R.id.itemsList);
+        int position = lv.getPositionForView(v);
+        return position;
     }
 }
 
