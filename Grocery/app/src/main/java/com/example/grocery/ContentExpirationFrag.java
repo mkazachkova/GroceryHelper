@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by mariyakazachkova on 4/16/17.
@@ -270,7 +271,7 @@ public class ContentExpirationFrag extends Fragment {
                     myItems.add(0, result);  // puts in reverse order
                 }
             } while (curse.moveToNext());
-
+        Collections.sort(myItems);
         shopAdapt.notifyDataSetChanged();
     }
 
