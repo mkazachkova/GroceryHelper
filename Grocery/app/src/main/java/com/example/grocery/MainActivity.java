@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,12 +46,33 @@ public class MainActivity extends AppCompatActivity
     private static ItemListFragment itemFragment = new ItemListFragment();
     FloatingActionButton fab;
 
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CharSequence text = "Swipe left when you place an item in your cart!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(MainActivity.this, text, duration);
+        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        CharSequence text = "Swipe left when you place an item in your cart!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(MainActivity.this, text, duration);
+        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
 
         dbAdapt = MyShoppingListDBAdapter.getInstance(MainActivity.this);
 //       dbAdapt.clear();

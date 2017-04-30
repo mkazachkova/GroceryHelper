@@ -40,21 +40,23 @@ public class ItemListFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         Context context = getActivity();
-        CharSequence text = "Swipe left when you place an item in your cart!";
-        int duration = Toast.LENGTH_SHORT;
+       // CharSequence text = "Swipe left when you place an item in your cart!";
+        //int duration = Toast.LENGTH_SHORT;
 
         dbAdapt = MyShoppingListDBAdapter.getInstance(getActivity().getApplicationContext());
     //    dbAdapt.clear();
         dbAdapt.open();
 
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.show();
+        //Toast toast = Toast.makeText(context, text, duration);
+        //toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+        //toast.show();
 
         view2 = inflater.inflate(R.layout.fragment_item_list, container, false);
         getActivity().setTitle("My Shopping List");
