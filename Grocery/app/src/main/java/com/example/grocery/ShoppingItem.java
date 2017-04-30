@@ -9,12 +9,14 @@ public class ShoppingItem {
     public int quantity;
     public int reminderDays;
     public String ID;
+    public boolean inList;
 
-    public ShoppingItem(String name, int quantity, int reminderDays , String ID) {
+    public ShoppingItem(String name, int quantity, int reminderDays , String ID, boolean inList) {
         this.name = name;
         this.quantity = quantity;
         this.reminderDays = reminderDays;
         this.ID = ID;
+        this.inList = inList;
     }
 
     public String getName() {
@@ -31,6 +33,11 @@ public class ShoppingItem {
 
     public String getID() {
         return this.ID;
+    }
+
+    public boolean inList() {
+        System.out.println(this.inList);
+        return this.inList;
     }
 
 }

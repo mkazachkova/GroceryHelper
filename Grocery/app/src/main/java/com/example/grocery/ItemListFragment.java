@@ -48,7 +48,7 @@ public class ItemListFragment extends Fragment {
         int duration = Toast.LENGTH_SHORT;
 
         dbAdapt = MyShoppingListDBAdapter.getInstance(getActivity().getApplicationContext());
-       // dbAdapt.clear();
+    //    dbAdapt.clear();
         dbAdapt.open();
 
         Toast toast = Toast.makeText(context, text, duration);
@@ -76,7 +76,7 @@ public class ItemListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
                 Object shoppingItem = shoppingListView.getItemAtPosition(position);
                // Object shoppingItem = dbAdapt.getItem(id);
-                ShoppingItem castItem = (ShoppingItem) shoppingItem;
+                final ShoppingItem castItem = (ShoppingItem) shoppingItem;
                 String idString = castItem.getID();
 
 
@@ -132,7 +132,12 @@ public class ItemListFragment extends Fragment {
 
                       //  Toast toast = Toast.makeText(context, text, duration);
                       //  toast.show();
-                        dbAdapt.removeItem(whyId);
+
+                        if (castItem.reminderDays >= 1) {
+                            dbAdapt.updateField(whyId,5,false+""); //represents that is no longer in shopping list
+                        } else {
+                            dbAdapt.removeItem(whyId);
+                        }
 
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.detach(frag).attach(frag).commit();
@@ -249,8 +254,10 @@ public class ItemListFragment extends Fragment {
         myItems.clear();
         if (curse.moveToFirst())
             do {
-                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4));
-                myItems.add(0, result);  // puts in reverse order
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                if (result.inList()) { //only display if actually in list
+                    myItems.add(0, result);  // puts in reverse order
+                }
             } while (curse.moveToNext());
 
         shopAdapt.notifyDataSetChanged();
