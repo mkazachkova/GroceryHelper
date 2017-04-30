@@ -17,7 +17,7 @@ public class ReceiptImage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.receipt_image_fragment); //this is not used for fragment
+        setContentView(R.layout.receipt_image); //this is not used for fragment
 
         setTitle("Receipt");
 

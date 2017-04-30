@@ -57,6 +57,9 @@ public class ContentReceiptFrag extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.receipts_main_fragment, container, false);
 
+
+
+
         //dbAdapt = DriveLogDBAdapter.getInstance(getActivity().getApplicationContext());
         //dbAdapt.open();
 
@@ -88,29 +91,6 @@ public class ContentReceiptFrag extends Fragment {
                 Intent intent = new Intent(getActivity(), ReceiptImage.class);
                 startActivity(intent);
 
-//                Fragment receiptImageFrag = new ReceiptImageFrag();
-
-                //EditLogFragment editLogFragment = new EditLogFragment();
-                //myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                //myPrefs = this.getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-                //SharedPreferences.Editor peditor = myPrefs.edit();
-                //peditor.putLong("currID", id);
-                //peditor.commit();
-                //getActivity().getIntent().getLongExtra("currID");
-
-                //MainActivity.currID = position;
-
-                //transaction = getSupportFragmentManager().beginTransaction();
-//                transaction = getFragmentManager().beginTransaction();
-//                transaction.replace(R.id.fragment_container, receiptImageFrag);
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-
-//                    getActivity().getFragmentManager().beginTransaction()
-//                            .replace(R.id.fragment_container, receiptImageFrag)
-//                            .addToBackStack(null)
-//                            .commit();
-//                    getActivity().setTitle("Receipt");
             }
         });
 
