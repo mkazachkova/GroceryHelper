@@ -8,15 +8,14 @@
     android:weightSum="1">
 
     <EditText
-        android:text="03/23/2017"
+        android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="40sp"
+        android:inputType="date"
         android:textColor="@color/colorAccent"
-        android:id="@+id/date"
-        android:inputType="date"/>
+        android:textSize="40sp" />
 
     <ImageView
         android:id="@+id/receipt_pic"
@@ -43,17 +42,17 @@
             android:gravity="center_horizontal"
             android:text="$"
             android:textColor="@color/colorAccent"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="57dp"
             android:gravity="center_horizontal"
-            android:text="25.63"
+            android:inputType="numberDecimal"
+            android:hint="Put receipt amount"
             android:textColor="@color/colorAccent"
-            android:textSize="30sp"
-            android:inputType="numberDecimal"/>
+            android:textSize="20sp" />
 
     </LinearLayout>
 

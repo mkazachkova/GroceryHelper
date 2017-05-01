@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.grocery">
+    package="com.example.grocery"
+    >
     <uses-permission android:name="android.permission.CAMERA"> </uses-permission>
     <application
         android:allowBackup="true"
@@ -24,6 +25,7 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
     </activity>
+
         <activity android:name=".ImageActivity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">

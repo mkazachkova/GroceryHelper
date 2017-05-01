@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Calendar;
 
 /**
  * Created by Kiki on 4/21/17.
@@ -24,7 +26,8 @@ public class ReceiptImage extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private Bitmap bitmap;
     private ImageView imageView;
-
+    private Calendar cal;
+    private EditText dateText, amountText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,23 +35,28 @@ public class ReceiptImage extends AppCompatActivity {
 
         setTitle("Receipt");
 
-        Button delete = (Button)findViewById(R.id.btn_delete);
+        Button cancel = (Button)findViewById(R.id.btn_delete);
         Button save = (Button)findViewById(R.id.btn_save);
-
+        amountText = (EditText)findViewById(R.id.total);
 
         //TODO: change this from accessing from database
         imageView = (ImageView) findViewById(R.id.receipt_pic);
 
-        //TODO: delete from database
-        delete.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view)
-            {
+        //set Date (get date)
+        dateText = (EditText) findViewById(R.id.date);
+        cal = Calendar.getInstance();
+        dateText.setText(String.format("%02d", cal.get(Calendar.MONTH) + 1) + "/" +
+                String.format("%02d",cal.get(Calendar.DAY_OF_MONTH)) + "/" + cal.get(Calendar.YEAR));
+
+        cancel.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
                 Context context = ReceiptImage.this;
                 CharSequence text = "Cancel Pressed!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+
             }
         });
 
@@ -60,10 +68,23 @@ public class ReceiptImage extends AppCompatActivity {
                 CharSequence text = "Save pressed!";
                 int duration = Toast.LENGTH_SHORT;
 
+                Long d = cal.getTimeInMillis(); //date
+                Float f = Float.parseFloat(amountText.getText().toString()); //amount
+                //TODO: imageURI
+                Receipt receipt = new Receipt(f, d);
+                MainActivity.rdbAdapt.insertReceipt(receipt);
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+                resetView();
             }
         });
+
+    }
+
+    public void resetView(){
+        amountText.setText("");
+        dateText.setText("");
+        //TODO: remove image
     }
 
     public void onClick(View View) {
@@ -90,10 +111,8 @@ public class ReceiptImage extends AppCompatActivity {
 
                 //TODO: also need to setImageBitmap for the receipt instance.
 
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
     }
-
 }
