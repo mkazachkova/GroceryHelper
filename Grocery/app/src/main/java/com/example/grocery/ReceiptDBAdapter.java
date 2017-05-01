@@ -28,7 +28,7 @@ public class ReceiptDBAdapter {
     public static final String RECEIPT_ID = "receipt_id"; //column 0
     public static final String RECEIPT_DATE = "receipt_date"; //long
     public static final String RECEIPT_AMOUNT = "receipt_amount"; //float
-    public static final String[] RECEIPT_COLS = {RECEIPT_ID, RECEIPT_DATE, RECEIPT_AMOUNT};
+    public static final String[] RECEIPT_COLS = {RECEIPT_ID, RECEIPT_AMOUNT, RECEIPT_DATE};
 
     private static final String DLOGS_TABLE = "dLogs";
     public static final String DLOG_ID = "dLog_id"; //column 0
