@@ -86,7 +86,10 @@ public class ReceiptImage extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                Long d = cal.getTimeInMillis(); //date
+
                 Float amt = Float.parseFloat(amountText.getText().toString()); //amount
+
                 //TODO: imageURI
                 Receipt receipt = new Receipt(amt, milliseconds); //save user's curr time if db not found?
                 MainActivity.rdbAdapt.insertReceipt(receipt);
