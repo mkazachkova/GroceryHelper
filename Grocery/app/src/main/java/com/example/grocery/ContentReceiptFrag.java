@@ -2,7 +2,13 @@ package com.example.grocery;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -12,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +35,9 @@ public class ContentReceiptFrag extends Fragment {
     protected static ReceiptAdapter aa; //array adapter
     private Context context;
     private View rootView;
+    FloatingActionButton fab;
     private FragmentTransaction transaction;
+    private int CAMERA_PIC_REQUEST;
     //private SharedPreferences myPrefs;
 
 //    @Override
@@ -57,25 +66,37 @@ public class ContentReceiptFrag extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.receipts_main_fragment, container, false);
 
+        //Hide main activity floating button
+        FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
+        if (floatingActionButton != null) {
+            floatingActionButton.hide();
+        }
+        //init floating button (take pic)
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab_receipt);
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //open default android phone camera
+                //Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                //startActivity(intent);
 
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 
+            }
+        });
 
         //dbAdapt = DriveLogDBAdapter.getInstance(getActivity().getApplicationContext());
         //dbAdapt.open();
 
         receiptListView = (ListView) rootView.findViewById(R.id.receipt_list_view);
-        //receiptItems = new ArrayList<Receipt>();
-
+        receiptItems = new ArrayList<Receipt>();
         //make array adapter to bind arrayList to ListView with new custom item layout
-//        aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
-//        receiptListView.setAdapter(aa);
-//        getActivity().setTitle("Receipts");
-//        updateArray();
-//
-//        System.out.println("begin to populate fake data...");
-//        receiptItems = populateData();
-
-
+        aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
+        receiptListView.setAdapter(aa);
+        getActivity().setTitle("Receipts");
+        updateArray();
 
         receiptListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,10 +104,7 @@ public class ContentReceiptFrag extends Fragment {
                 Object listItem = receiptListView.getItemAtPosition(position);
                 System.out.println(listItem);
 
-                //start receiptImage activity
-
-//                Intent i=new Intent(ContentReceiptFrag.this, ReceiptImage.class);
-//                startActivity(i);
+                MainActivity.rcurrID = position; //update current receipt ID
 
                 Intent intent = new Intent(getActivity(), ReceiptImage.class);
                 startActivity(intent);
@@ -97,25 +115,74 @@ public class ContentReceiptFrag extends Fragment {
         return rootView;
     }
 
-    public void updateArray() {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("inside onActivityResult");
 
-//            Cursor cursor = MainActivity.dbAdapt.getAllDriveLogs();
-//            driveLogItems.clear();
-//            if (cursor.moveToFirst())
-//                do {
-//                    DriveLog result = new DriveLog(cursor.getFloat(1), cursor.getLong(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
-//                    driveLogItems.add(0, result); //puts in reverse order
-//                } while (cursor.moveToNext());
-//
-//            aa.notifyDataSetChanged();
+        if (requestCode == CAMERA_PIC_REQUEST) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            //get uri from the bitmap
+            Uri tempURI = data.getData();
+            System.out.println(tempURI);
+            //Uri tempURI = getImageUri(context, photo);
+
+            //get actual path
+            //File finalFile = new File(getRealPathFromURI(tempURI));
+            //System.out.println(finalFile);
+            System.out.println("hello world");
+            //ImageView imageview = (ImageView) rootView.findViewById(R.id.ImageView01);
+            //imageview.setImageBitmap(image);
+        }
     }
+
+    //TODO: this method is not used.
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+//    public String getRealPathFromURI(Uri uri) {
+//        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+//        cursor.moveToFirst();
+//        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+//        return cursor.getString(idx);
+//    }
+
+
+    public String getRealPathFromURI(Uri contentUri) {
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch (Exception e) {
+            return contentUri.getPath();
+        }
+    }
+
+
+    public void updateArray() {
+        Cursor cursor = MainActivity.rdbAdapt.getAllReceipts();
+        receiptItems.clear();
+        if (cursor.moveToFirst())
+            do {
+                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2));
+                receiptItems.add(0, result); //puts in reverse order
+            } while (cursor.moveToNext());
+        aa.notifyDataSetChanged();
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
 
         // Populating fake data - will need to replace with getting actual data from database
-        receiptItems = populateData();
+        //receiptItems = populateData();
 
         aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
         receiptListView.setAdapter(aa);

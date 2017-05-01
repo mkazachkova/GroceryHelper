@@ -52,15 +52,5 @@ public class ImageActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-//            } finally ch (IOException e) {
-//            e{
-//                if (stream != null)
-//                    try {
-//                        stream.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//            }
-//        }
     }
 }

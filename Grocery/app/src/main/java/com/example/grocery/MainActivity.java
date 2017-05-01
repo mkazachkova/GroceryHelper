@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity
     private static ItemListFragment itemFragment = new ItemListFragment();
     FloatingActionButton fab;
 
-
+    public static ReceiptDBAdapter rdbAdapt;  // ref to our database
+    public static int rcurrID; //current receipt ID
 
     @Override
     public void onResume() {
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity
 
        // dbAdaptExp = MyExpirationListDBAdapter.getInstance(MainActivity.this);
         //dbAdaptExp.open();
+
+        rdbAdapt = new ReceiptDBAdapter(this);
+        rdbAdapt.open();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);
@@ -534,6 +538,10 @@ public class MainActivity extends AppCompatActivity
             } while (curse.moveToNext());
         return "";
         // shopAdapt.notifyDataSetChanged();
+    }
+
+    public FloatingActionButton getFloatingActionButton() {
+        return fab;
     }
 
 }
