@@ -30,16 +30,6 @@ public class ReceiptDBAdapter {
     public static final String RECEIPT_AMOUNT = "receipt_amount"; //float
     public static final String[] RECEIPT_COLS = {RECEIPT_ID, RECEIPT_AMOUNT, RECEIPT_DATE};
 
-    private static final String DLOGS_TABLE = "dLogs";
-    public static final String DLOG_ID = "dLog_id"; //column 0
-    public static final String DLOG_HOURS = "dLog_hours";
-    public static final String DLOG_DATE = "dLog_date";
-    public static final String DLOG_DAY = "dLog_day";
-    public static final String DLOG_ROADTYPE = "dLog_roadType";
-    public static final String DLOG_WEATHER = "dLog_weather";
-    public static final String[] DLOG_COLS = {DLOG_ID, DLOG_HOURS, DLOG_DATE, DLOG_DAY, DLOG_ROADTYPE, DLOG_WEATHER};
-
-
     public static synchronized ReceiptDBAdapter getInstance(Context context) {
         if (dbInstance == null) {
             dbInstance = new ReceiptDBAdapter(context.getApplicationContext());

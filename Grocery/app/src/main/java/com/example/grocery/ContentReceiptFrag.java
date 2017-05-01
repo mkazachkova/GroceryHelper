@@ -85,8 +85,8 @@ public class ContentReceiptFrag extends Fragment {
                 //startActivity(intent);
 
 //                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivity(cameraIntent);
-                //startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+////                startActivity(cameraIntent);
+//                startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 
             }
         });
@@ -170,6 +170,7 @@ public class ContentReceiptFrag extends Fragment {
 
 
     public void updateArray() {
+        //TODO: need to sort database by Date
         Cursor cursor = MainActivity.rdbAdapt.getAllReceipts();
         receiptItems.clear();
         if (cursor.moveToFirst())
@@ -181,18 +182,17 @@ public class ContentReceiptFrag extends Fragment {
         cursor.close();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-
+        System.out.println("in on Resume of ContentReceiptFrag");
         // Populating fake data - will need to replace with getting actual data from database
         //receiptItems = populateData();
 
         aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
         receiptListView.setAdapter(aa);
-
         getActivity().setTitle("Receipts");
+        updateArray();
 
     }
 
@@ -226,11 +226,6 @@ public class ContentReceiptFrag extends Fragment {
         }
         return rList;
     }
-
-
-
-
-
 
 
 

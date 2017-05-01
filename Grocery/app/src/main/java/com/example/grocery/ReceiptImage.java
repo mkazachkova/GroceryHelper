@@ -18,8 +18,10 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
+import java.util.Date;
+import java.text.ParseException;
 /**
  * Created by Kiki on 4/21/17.
  */
@@ -44,10 +46,10 @@ public class ReceiptImage extends AppCompatActivity {
 
         //TODO: change this from accessing from database??
         imageView = (ImageView) findViewById(R.id.receipt_pic);
-        imageView.setVisibility(View.INVISIBLE);
-        System.out.println("receipt image should be invisible");
+        //imageView.setVisibility(View.INVISIBLE);
+        //System.out.println("receipt image should be invisible");
 
-        //set Date (get date)
+        //set default Date (get date)
         dateText = (EditText) findViewById(R.id.date);
         resetView(); //set amount, date to empty
         cal = Calendar.getInstance();
@@ -62,11 +64,10 @@ public class ReceiptImage extends AppCompatActivity {
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
-
+                finish(); //go back to prev activity
             }
         });
 
-        //TODO: save changes to database
         save.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view)
             {
@@ -74,13 +75,24 @@ public class ReceiptImage extends AppCompatActivity {
                 CharSequence text = "Save pressed!";
                 int duration = Toast.LENGTH_SHORT;
 
-                Long d = cal.getTimeInMillis(); //date
-                Float f = Float.parseFloat(amountText.getText().toString()); //amount
+                Long milliseconds = cal.getTimeInMillis(); //date
+
+                //convert dateText back to Long
+                SimpleDateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+                try {
+                    Date d = f.parse(dateText.getText().toString());
+                    milliseconds = d.getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Float amt = Float.parseFloat(amountText.getText().toString()); //amount
                 //TODO: imageURI
-                Receipt receipt = new Receipt(f, d);
+                Receipt receipt = new Receipt(amt, milliseconds); //save user's curr time if db not found?
                 MainActivity.rdbAdapt.insertReceipt(receipt);
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+                finish(); //go back to prev activity
 
             }
         });
@@ -93,6 +105,7 @@ public class ReceiptImage extends AppCompatActivity {
         //TODO: remove image
     }
 
+    /* select image from the phone gallery */
     public void onClick(View View) {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -114,9 +127,10 @@ public class ReceiptImage extends AppCompatActivity {
                 bitmap = BitmapFactory.decodeStream(stream);
 
                 imageView.setImageBitmap(bitmap);
-
+                System.out.println("after imageView setImage");
                 //TODO: also need to setImageBitmap for the receipt instance.
                 System.out.println(data.getData());
+                System.out.println("after data.getData()");
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

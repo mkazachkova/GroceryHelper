@@ -1,9 +1,12 @@
 package com.example.grocery;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +27,18 @@ public class EditReceiptImage extends ReceiptImage {
         super.onCreate(savedInstanceState);
         setTitle("Edit Receipt");
 
+        //update text buttons
+        Button deleteButton = (Button)findViewById(R.id.btn_delete);
+        Button updateButton = (Button)findViewById(R.id.btn_save);
+        deleteButton.setText("DELETE");
+        updateButton.setText("UPDATE"); //same function as save button in ReceiptImage
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                delete();
+            }
+        });
+
         currPos = MainActivity.rcurrID;
         cursor = MainActivity.rdbAdapt.getAllReceipts();
         cursor.move(cursor.getCount() - currPos);
@@ -40,6 +55,18 @@ public class EditReceiptImage extends ReceiptImage {
         //TODO:finish populating (image)
         img = (ImageView)findViewById(R.id.receipt_pic);
         img.setVisibility(View.VISIBLE);
+    }
+
+    public void delete() {
+        //toast message
+        Context context = EditReceiptImage.this;
+        CharSequence text = "Delete Pressed!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
+        MainActivity.rdbAdapt.removeReceipt(cursor.getLong(0)); //delete from database
+        finish(); //go back to prev activity
     }
 
 }
