@@ -1,6 +1,7 @@
 package com.example.grocery;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -18,6 +20,10 @@ import java.util.Date;
  */
 
 public class CalendarFrag extends Fragment {
+
+
+    protected static ArrayList<Date> dateArrayList;
+    private int temp;
     public static CalendarFrag newInstance() {
         CalendarFrag fragment = new CalendarFrag();
         return fragment;
@@ -32,6 +38,7 @@ public class CalendarFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        temp = -1;
         View view = inflater.inflate(R.layout.statistics_calendar_fragment, container, false);
 
         CaldroidFragment cfragment = new CaldroidFragment();
@@ -39,34 +46,52 @@ public class CalendarFrag extends Fragment {
         args.putInt( CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY );
         args.putString(CaldroidFragment.DIALOG_TITLE, "Shopping History");
         cfragment.setArguments( args );
-        //dummy vars
-        Date first = new Date(117,3,20);
-        Date second = new Date(117,3,16);
-        Date third = new Date(117,3,8);
-        Date fourth = new Date(117,2,28);
 
-        cfragment.setTextColorForDate(R.color.colorPrimary, first);
-        cfragment.setTextColorForDate(R.color.colorPrimary, second);
-        cfragment.setTextColorForDate(R.color.colorPrimary, third);
-        cfragment.setTextColorForDate(R.color.colorPrimary, fourth);
+        dateArrayList = new ArrayList<Date>();
+        Cursor cursor = MainActivity.rdbAdapt.getAllReceipts();
+        if (cursor.moveToFirst())
+            do {
+                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2));
+                dateArrayList.add(new Date(result.getDate())); //puts in reverse order
+            } while (cursor.moveToNext());
+        cursor.close();
+
+        for(int i = 0; i < dateArrayList.size(); i ++ ) {
+            cfragment.setTextColorForDate(R.color.colorPrimary, dateArrayList.get(i));
+        }
+
+
+
+
+
+
+        Toast toast = Toast.makeText(getContext(), "Press Highlighted dates to see shopping activities for the day!", Toast.LENGTH_LONG);
+        toast.show();
 
         final CaldroidListener listener = new CaldroidListener() {
             @Override
             public void onSelectDate(Date date, View view) {
-                //dummy date
-                if(date.equals(new Date(117,3,20)) || date.equals(new Date(117,3,16)) ||
-                        date.equals(new Date(117,3,8)) || date.equals(new Date(117,2,28))) {
-                    Intent intent = new Intent(getActivity(), ReceiptImage.class);
+
+                System.out.println("date pressed: "+date.getDate()+ " , "+dateArrayList.contains(date));
+                for(int i = 0; i <dateArrayList.size(); i++) {
+                    if(dateArrayList.get(i).getYear() == date.getYear() &&
+                            dateArrayList.get(i).getMonth() == date.getMonth() &&
+                            dateArrayList.get(i).getDate() == date.getDate()) {
+                        temp = i;
+                    }
+                }
+
+                if(temp > 0) { //if there exists shopping
+                    Intent intent = new Intent(getActivity(), EditReceiptImage.class);
                     startActivity(intent);
+                    temp = -1;
+                } else {
+                    Toast t = Toast.makeText(getContext(), "No shopping event that day!", Toast.LENGTH_LONG);
                 }
             }
 
         };
-
-
         cfragment.setCaldroidListener(listener);
-        Toast toast = Toast.makeText(getContext(), "Press Highlighted dates to see shopping activities for the day!", Toast.LENGTH_LONG);
-        toast.show();
 
         getActivity().getSupportFragmentManager().beginTransaction().replace( R.id.container_caldroid , cfragment ).commit();
 

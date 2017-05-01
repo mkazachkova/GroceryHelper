@@ -76,6 +76,9 @@ public class ReceiptImage extends AppCompatActivity {
 
                 Long d = cal.getTimeInMillis(); //date
                 Float f = Float.parseFloat(amountText.getText().toString()); //amount
+                System.out.println("F: "+f);
+                System.out.println("D: "+d);
+
                 //TODO: imageURI
                 Receipt receipt = new Receipt(f, d);
                 MainActivity.rdbAdapt.insertReceipt(receipt);
