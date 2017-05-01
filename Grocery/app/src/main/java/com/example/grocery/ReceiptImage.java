@@ -35,7 +35,7 @@ public class ReceiptImage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.receipt_image); //this is not used for fragment
-        resetView(); //set amount, date to empty
+
         setTitle("Receipt");
 
         Button cancel = (Button)findViewById(R.id.btn_delete);
@@ -49,6 +49,7 @@ public class ReceiptImage extends AppCompatActivity {
 
         //set Date (get date)
         dateText = (EditText) findViewById(R.id.date);
+        resetView(); //set amount, date to empty
         cal = Calendar.getInstance();
         dateText.setText(String.format("%02d", cal.get(Calendar.MONTH) + 1) + "/" +
                 String.format("%02d",cal.get(Calendar.DAY_OF_MONTH)) + "/" + cal.get(Calendar.YEAR));

@@ -18,12 +18,9 @@ public class EditReceiptImage extends ReceiptImage {
     private int currPos;
     private Cursor cursor;
 
-    public EditReceiptImage() {
-        // Required empty public constructor
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("hello");
         super.onCreate(savedInstanceState);
         setTitle("Edit Receipt");
 
