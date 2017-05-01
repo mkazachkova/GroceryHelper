@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -109,7 +110,7 @@ public class ContentReceiptFrag extends Fragment {
 
                 MainActivity.rcurrID = position; //update current receipt ID
 
-                Intent intent = new Intent(getActivity(), ReceiptImage.class);
+                Intent intent = new Intent(getActivity(), EditReceiptImage.class);
                 startActivity(intent);
 
             }
@@ -118,25 +119,25 @@ public class ContentReceiptFrag extends Fragment {
         return rootView;
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        System.out.println("inside onActivityResult");
-//
-//        if (requestCode == CAMERA_PIC_REQUEST) {
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//
-//            //get uri from the bitmap
-//            Uri tempURI = data.getData();
-//            System.out.println(tempURI);
-//            //Uri tempURI = getImageUri(context, photo);
-//
-//            //get actual path
-//            //File finalFile = new File(getRealPathFromURI(tempURI));
-//            //System.out.println(finalFile);
-//            System.out.println("hello world");
-//            //ImageView imageview = (ImageView) rootView.findViewById(R.id.ImageView01);
-//            //imageview.setImageBitmap(image);
-//        }
-//    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("inside onActivityResult");
+
+        if (requestCode == CAMERA_PIC_REQUEST) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            //get uri from the bitmap
+            Uri tempURI = data.getData();
+            System.out.println(tempURI);
+            //Uri tempURI = getImageUri(context, photo);
+
+            //get actual path
+            //File finalFile = new File(getRealPathFromURI(tempURI));
+            //System.out.println(finalFile);
+            System.out.println("hello world");
+            //ImageView imageview = (ImageView) rootView.findViewById(R.id.ImageView01);
+            //imageview.setImageBitmap(image);
+        }
+    }
 
     //TODO: this method is not used.
     public Uri getImageUri(Context inContext, Bitmap inImage) {
@@ -154,18 +155,18 @@ public class ContentReceiptFrag extends Fragment {
 //    }
 
 
-//    public String getRealPathFromURI(Uri contentUri) {
-//        try {
-//            String[] proj = {MediaStore.Images.Media.DATA};
-//
-//            Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            cursor.moveToFirst();
-//            return cursor.getString(column_index);
-//        } catch (Exception e) {
-//            return contentUri.getPath();
-//        }
-//    }
+    public String getRealPathFromURI(Uri contentUri) {
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch (Exception e) {
+            return contentUri.getPath();
+        }
+    }
 
 
     public void updateArray() {

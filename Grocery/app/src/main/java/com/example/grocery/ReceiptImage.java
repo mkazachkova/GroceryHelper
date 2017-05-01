@@ -3,9 +3,12 @@ package com.example.grocery;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -27,20 +30,22 @@ public class ReceiptImage extends AppCompatActivity {
     private Bitmap bitmap;
     private ImageView imageView;
     private Calendar cal;
-    private EditText dateText, amountText;
+    protected EditText dateText, amountText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.receipt_image); //this is not used for fragment
-
+        resetView(); //set amount, date to empty
         setTitle("Receipt");
 
         Button cancel = (Button)findViewById(R.id.btn_delete);
         Button save = (Button)findViewById(R.id.btn_save);
         amountText = (EditText)findViewById(R.id.total);
 
-        //TODO: change this from accessing from database
+        //TODO: change this from accessing from database??
         imageView = (ImageView) findViewById(R.id.receipt_pic);
+        imageView.setVisibility(View.INVISIBLE);
+        System.out.println("receipt image should be invisible");
 
         //set Date (get date)
         dateText = (EditText) findViewById(R.id.date);
@@ -75,7 +80,7 @@ public class ReceiptImage extends AppCompatActivity {
                 MainActivity.rdbAdapt.insertReceipt(receipt);
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
-                resetView();
+
             }
         });
 
@@ -110,9 +115,24 @@ public class ReceiptImage extends AppCompatActivity {
                 imageView.setImageBitmap(bitmap);
 
                 //TODO: also need to setImageBitmap for the receipt instance.
+                System.out.println(data.getData());
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
     }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } catch (Exception e) {
+            return contentUri.getPath();
+        }
+    }
+
 }

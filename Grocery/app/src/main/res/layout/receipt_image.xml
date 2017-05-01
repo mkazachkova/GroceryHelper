@@ -68,7 +68,7 @@
             android:layout_height="26dp"
             android:background="@android:color/holo_red_light"
             android:clickable="true"
-            android:text="Delete"
+            android:text="CANCEL"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
 
