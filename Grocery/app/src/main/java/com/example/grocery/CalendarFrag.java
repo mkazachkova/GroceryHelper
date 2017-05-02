@@ -51,7 +51,7 @@ public class CalendarFrag extends Fragment {
         Cursor cursor = MainActivity.rdbAdapt.getAllReceipts();
         if (cursor.moveToFirst())
             do {
-                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2));
+                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2), cursor.getString(3));
                 dateArrayList.add(new Date(result.getDate())); //puts in reverse order
             } while (cursor.moveToNext());
         cursor.close();

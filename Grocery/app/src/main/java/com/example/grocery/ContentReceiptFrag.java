@@ -100,7 +100,7 @@ public class ContentReceiptFrag extends Fragment {
         aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
         receiptListView.setAdapter(aa);
         getActivity().setTitle("Receipts");
-        updateArray();
+        //updateArray();
 
         receiptListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -175,7 +175,7 @@ public class ContentReceiptFrag extends Fragment {
         receiptItems.clear();
         if (cursor.moveToFirst())
             do {
-                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2));
+                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2), cursor.getString(3));
                 receiptItems.add(0, result); //puts in reverse order
             } while (cursor.moveToNext());
         aa.notifyDataSetChanged();
@@ -192,7 +192,7 @@ public class ContentReceiptFrag extends Fragment {
         aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
         receiptListView.setAdapter(aa);
         getActivity().setTitle("Receipts");
-        updateArray();
+//        updateArray();
 
     }
 
@@ -220,10 +220,10 @@ public class ContentReceiptFrag extends Fragment {
         }
 
 
-        for (int i = 0; i < amount.length; i++) {
-            Receipt temp = new Receipt(amount[i], date[i]);
-            rList.add(temp);
-        }
+        //for (int i = 0; i < amount.length; i++) {
+            //Receipt temp = new Receipt(amount[i], date[i]);
+            //rList.add(temp);
+        //}
         return rList;
     }
 

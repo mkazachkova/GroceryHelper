@@ -2,6 +2,7 @@ package com.example.grocery;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -52,8 +53,11 @@ public class EditReceiptImage extends ReceiptImage {
         String date = new SimpleDateFormat("MM/dd/yyyy").format(new Date(l)); //String date = new Date(l).toString(); //convert date (long) back to string
         dateText.setText(date);
         amountText.setText(String.format("%.2f", cursor.getFloat(1)));
+
         //TODO:finish populating (image)
+        Uri picUri = Uri.parse(cursor.getString(3));
         img = (ImageView)findViewById(R.id.receipt_pic);
+        img.setImageURI(picUri);
         img.setVisibility(View.VISIBLE);
     }
 

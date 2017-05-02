@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.ParseException;
+
 /**
  * Created by Kiki on 4/21/17.
  */
@@ -33,6 +34,7 @@ public class ReceiptImage extends AppCompatActivity {
     private ImageView imageView;
     private Calendar cal;
     protected EditText dateText, amountText;
+    protected String uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,11 @@ public class ReceiptImage extends AppCompatActivity {
 
         //TODO: change this from accessing from database??
         imageView = (ImageView) findViewById(R.id.receipt_pic);
+
+        uri = "android.resource://com.example.grocery/drawable/select_image.png";
+        //bmap = Uri.parse("android.resource://com.example.grocery/drawable/select_image.png");
+        //System.out.println(bmap);
+
         //imageView.setVisibility(View.INVISIBLE);
         //System.out.println("receipt image should be invisible");
 
@@ -90,8 +97,8 @@ public class ReceiptImage extends AppCompatActivity {
 
                 Float amt = Float.parseFloat(amountText.getText().toString()); //amount
 
-                //TODO: imageURI
-                Receipt receipt = new Receipt(amt, milliseconds); //save user's curr time if db not found?
+                //TODO: add imageURI
+                Receipt receipt = new Receipt(amt, milliseconds, uri); //save user's curr time if db not found?
                 MainActivity.rdbAdapt.insertReceipt(receipt);
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
@@ -134,6 +141,7 @@ public class ReceiptImage extends AppCompatActivity {
                 //TODO: also need to setImageBitmap for the receipt instance.
                 System.out.println(data.getData());
                 System.out.println("after data.getData()");
+                uri = data.getData().toString(); //uri
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

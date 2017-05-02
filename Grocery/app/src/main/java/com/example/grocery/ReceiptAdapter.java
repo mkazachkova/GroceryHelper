@@ -1,6 +1,7 @@
 package com.example.grocery;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class ReceiptAdapter extends ArrayAdapter<Receipt> {
         TextView amount = (TextView) logView.findViewById(R.id.receipt_amt);
         TextView receiptDate = (TextView) logView.findViewById(R.id.receipt_date);
         ImageView receiptImage = (ImageView) logView.findViewById(R.id.receipt_image);
+        receiptImage.setVisibility(View.INVISIBLE);
 
         ImageView edit = (ImageView)logView.findViewById(R.id.receipt_edit);
         ImageView delete = (ImageView)logView.findViewById(R.id.receipt_delete);
@@ -63,6 +65,16 @@ public class ReceiptAdapter extends ArrayAdapter<Receipt> {
         //int resID=getResources().getIdentifier(picID,"id",getPackageName()); //find image file
         //receiptImage.setImageResource();
 
+        //TODO: get uri
+
+//        InputStream stream = getContentResolver().openInputStream(receipt.getUri());
+//        Bitmap bitmap = BitmapFactory.decodeStream(stream);
+        //receiptImage.setImageBitmap(bitmap);
+
+        if (receipt.getUri() != null) {
+            receiptImage.setImageURI(Uri.parse(receipt.getUri()));
+            receiptImage.setVisibility(View.VISIBLE);
+        }
         return logView;
     }
 

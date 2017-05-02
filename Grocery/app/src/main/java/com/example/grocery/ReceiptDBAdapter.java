@@ -28,7 +28,8 @@ public class ReceiptDBAdapter {
     public static final String RECEIPT_ID = "receipt_id"; //column 0
     public static final String RECEIPT_DATE = "receipt_date"; //long
     public static final String RECEIPT_AMOUNT = "receipt_amount"; //float
-    public static final String[] RECEIPT_COLS = {RECEIPT_ID, RECEIPT_AMOUNT, RECEIPT_DATE};
+    public static final String RECEIPT_URI = "receipt_uri"; //uri
+    public static final String[] RECEIPT_COLS = {RECEIPT_ID, RECEIPT_AMOUNT, RECEIPT_DATE, RECEIPT_URI};
 
     public static synchronized ReceiptDBAdapter getInstance(Context context) {
         if (dbInstance == null) {
@@ -70,6 +71,7 @@ public class ReceiptDBAdapter {
         //cvalues.put(DLOG_ID, dLog.getID());
         cvalues.put(RECEIPT_AMOUNT, r.getAmount());
         cvalues.put(RECEIPT_DATE, r.getDate());
+        cvalues.put(RECEIPT_URI, r.getUri());
         //add to course table in database
         return db.insert(RECEIPT_TABLE, null, cvalues);
     }
@@ -80,16 +82,19 @@ public class ReceiptDBAdapter {
     }
 
     /** update receipt */
-    public boolean updateReceipt(long rid, long d, float a) {
+    public boolean updateReceipt(long rid, long d, float a, String u) {
         ContentValues cvalue = new ContentValues();
         cvalue.put(RECEIPT_AMOUNT, a);
         cvalue.put(RECEIPT_DATE, d);
+        cvalue.put(RECEIPT_URI, u);
         return db.update(RECEIPT_TABLE, cvalue, RECEIPT_ID+"="+rid, null) > 0;
     }
 
     // database query methods
     public Cursor getAllReceipts() {
         return db.query(RECEIPT_TABLE, RECEIPT_COLS, null, null, null, null, null);
+        //return db.query(RECEIPT_TABLE, RECEIPT_COLS, RECEIPT_ID + "")
+        //Cursor cursor = db.query(TABLE_TEXTS, columns, KEY_NAME + "=" + text_spinner1, null, null, null, null);
     }
 
     public Cursor getReceiptCursor(long rid) throws SQLException {
@@ -106,15 +111,15 @@ public class ReceiptDBAdapter {
             throw new SQLException("No drive log item found for row: " + rid);
         }
         // Receipt(float amount,long date)
-        return new Receipt(cursor.getFloat(1), cursor.getLong(2));
+        return new Receipt(cursor.getFloat(1), cursor.getLong(2), cursor.getString(3));
     }
 
 
     private static class ReceiptDBhelper extends SQLiteOpenHelper {
         // SQL statement to create a new database
         private static final String DB_CREATE = "CREATE TABLE " + RECEIPT_TABLE
-                + " (" + RECEIPT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RECEIPT_AMOUNT + " FLOAT,"
-                + RECEIPT_DATE + " LONG);";
+                + " (" + RECEIPT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RECEIPT_AMOUNT + " FLOAT, "
+                + RECEIPT_DATE + " LONG, " + RECEIPT_URI + " TEXT);";
 
         public ReceiptDBhelper(Context context, String name, SQLiteDatabase.CursorFactory fct, int version) {
             super(context, name, fct, version);
