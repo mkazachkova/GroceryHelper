@@ -22,11 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+	<receiver android:name="com.example.grocery.NotificationPublisher" />
 
         <activity android:name=".ReceiptImage"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
-    </activity>
+        </activity>
 
         <activity android:name=".EditReceiptImage"
             android:parentActivityName=".MainActivity"
