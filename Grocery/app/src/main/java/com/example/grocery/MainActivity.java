@@ -49,18 +49,6 @@ public class MainActivity extends AppCompatActivity
     public static ReceiptDBAdapter rdbAdapt;  // ref to our database
     public static int rcurrID; //current receipt ID
 
-//    @Override
-//    public void onResume() {
-////        super.onResume();
-////        CharSequence text = "Swipe left when you place an item in your cart!";
-////        int duration = Toast.LENGTH_SHORT;
-////
-////        Toast toast = Toast.makeText(MainActivity.this, text, duration);
-////        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
-////        toast.show();
-//    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,7 +211,29 @@ public class MainActivity extends AppCompatActivity
        // fragmentTransaction.replace(R.id.content_frame, itemFragment);
        // fragmentTransaction.commit();
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Cursor curse = dbAdapt.getAllItems();
+        int listNumb = 0;
+        if (curse.moveToFirst())
+            do {
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                if (result.inList) {
+                    listNumb++;
+                }
+            } while (curse.moveToNext());
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        TextView itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
+        String lastNumbItem = Integer.toString(listNumb) + " Items";
+        itemsNumb.setText(lastNumbItem);
+        
+        //TODO: refresh the navdrawer
     }
 
     @Override
