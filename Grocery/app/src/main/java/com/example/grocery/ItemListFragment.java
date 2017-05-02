@@ -1,28 +1,37 @@
 package com.example.grocery;
 
 
-import android.app.AlertDialog;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Gravity;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.AdapterView;
+import android.app.AlertDialog;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+
+import static android.content.Context.ALARM_SERVICE;
 
 
 /**
@@ -36,6 +45,8 @@ public class ItemListFragment extends Fragment {
     protected ShoppingAdapter shopAdapt;
     private AlertDialog b;
     private View view2;
+    int count = 0;
+    int multiplier = 86400000;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -47,7 +58,7 @@ public class ItemListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Context context = getActivity();
+        final Context context = getActivity();
        // CharSequence text = "Swipe left when you place an item in your cart!";
         //int duration = Toast.LENGTH_SHORT;
 
@@ -221,15 +232,47 @@ public class ItemListFragment extends Fragment {
             public void onSwipeLeft() {
                 ShoppingItem swiped = getItemFromSwipe();
                 String id = swiped.getID();
-               ShoppingItem temp =  dbAdapt.getItem(Long.parseLong(id));
-               // listViewAdapter.notifyDataSetChanged();
+                ShoppingItem temp = dbAdapt.getItem(Long.parseLong(id));
+                // listViewAdapter.notifyDataSetChanged();
 
                 if (temp.reminderDays >= 1) {
-                    dbAdapt.updateField(Long.parseLong(id),5,false+""); //represents that is no longer in shopping list
+                    dbAdapt.updateField(Long.parseLong(id), 5, false + ""); //represents that is no longer in shopping list
                 } else {
                     dbAdapt.removeItem(Long.parseLong(id));
                 }
 
+                String pushName = swiped.getName();
+                int pushDays = swiped.getDays();
+                //TODO: make notification go off at 8 am
+
+                Calendar setTime = Calendar.getInstance();
+                Calendar currentTime = Calendar.getInstance();
+
+                setTime.set(Calendar.HOUR, 8);
+                setTime.set(Calendar.MINUTE, 0);
+                setTime.set(Calendar.SECOND, 0);
+
+                long eightTime = setTime.getTimeInMillis();
+                long nowTime = currentTime.getTimeInMillis();
+                long total;
+
+                if (eightTime > nowTime) {
+                    total = eightTime - nowTime;
+                    total = total + (pushDays*multiplier);
+                } else {
+                    setTime.add(Calendar.DAY_OF_MONTH, 1);
+                    eightTime = setTime.getTimeInMillis();
+                    total = eightTime - nowTime;
+                    if (pushDays != 1) {
+                        total = total + ((pushDays - 1) * multiplier);
+                    }
+                }
+
+                if (pushDays != 0) {
+                    GenerateNotifications generateNotifications =
+                            new GenerateNotifications(getNotification(pushName + " will expire soon!!!"), (int) total);
+                    generateNotifications.start();
+                }
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.detach(frag).attach(frag).commit();
 
@@ -268,6 +311,56 @@ public class ItemListFragment extends Fragment {
 
     }*/
 
+    class GenerateNotifications extends Thread{
+
+        Notification notification;
+        int delay;
+        String content;
+
+        public GenerateNotifications(Notification notification, int delay){
+            this.notification = notification;
+            this.delay = delay;
+        }
+
+        @Override
+        public void run(){
+            try {
+                Thread.sleep(delay);
+                this.schedule();
+            }catch(Exception e){
+
+            }
+        }
+
+        private void schedule() {
+            Intent notificationIntent = new Intent(getActivity(), MainActivity.class);
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID,0);
+            notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+            long future = SystemClock.elapsedRealtime() + delay;
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,future,pendingIntent);
+
+            NotificationManager NM = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            NM.notify(count++,notification);
+        }
+
+    }
+
+    private Notification getNotification(String content) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity());
+        builder.setContentTitle("Expiration Reminder");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.ic_shopping);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        return builder.build();
+    }
 
     public void updateArray() {
         Cursor curse = dbAdapt.getAllItems();
@@ -289,27 +382,5 @@ public class ItemListFragment extends Fragment {
         int position = lv.getPositionForView(v);
         return position;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        CharSequence text = "Swipe left when you place an item in your cart!";
-        int duration = Toast.LENGTH_SHORT;
-
-        //Toast toast = Toast.makeText(MainActivity.this, text, duration);
-        Toast toast = Toast.makeText(getActivity(), text, duration);
-        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.show();
-
-        //show floatingactionbutton
-        FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
-        if (floatingActionButton != null) {
-            System.out.println("fab is not null in item list fragment");
-            //floatingActionButton.show();
-            floatingActionButton.setVisibility(View.VISIBLE);
-        }
-
-    }
-
 }
 
