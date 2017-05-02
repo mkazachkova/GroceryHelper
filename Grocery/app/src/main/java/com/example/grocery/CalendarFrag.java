@@ -62,9 +62,6 @@ public class CalendarFrag extends Fragment {
 
 
 
-
-
-
         Toast toast = Toast.makeText(getContext(), "Press Highlighted dates to see shopping activities for the day!", Toast.LENGTH_LONG);
         toast.show();
 
@@ -82,6 +79,7 @@ public class CalendarFrag extends Fragment {
                 }
 
                 if(temp > 0) { //if there exists shopping
+                    MainActivity.rcurrID = temp;
                     Intent intent = new Intent(getActivity(), EditReceiptImage.class);
                     startActivity(intent);
                     temp = -1;
