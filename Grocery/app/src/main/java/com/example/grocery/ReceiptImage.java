@@ -94,7 +94,7 @@ public class ReceiptImage extends AppCompatActivity {
                 }
 
                 Long d = cal.getTimeInMillis(); //date
-
+                if (amountText.getText() != null) {
                 Float amt = Float.parseFloat(amountText.getText().toString()); //amount
 
                 //TODO: add imageURI
@@ -103,6 +103,11 @@ public class ReceiptImage extends AppCompatActivity {
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
                 finish(); //go back to prev activity
+                } else {
+                    CharSequence text2 = "Please type receipt amount!";
+                    Toast toast = Toast.makeText(context, text2, duration);
+                    toast.show();
+                }
 
             }
         });
