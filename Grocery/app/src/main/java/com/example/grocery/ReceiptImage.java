@@ -97,7 +97,8 @@ public class ReceiptImage extends AppCompatActivity {
                 }
 
                 Long d = cal.getTimeInMillis(); //date
-                if (amountText.getText() != null) {
+                if (!amountText.getText().toString().isEmpty()) {
+                    System.out.println("amountText.getText() is not null");
                 Float amt = Float.parseFloat(amountText.getText().toString()); //amount
 
                 //TODO: add imageURI
@@ -108,6 +109,7 @@ public class ReceiptImage extends AppCompatActivity {
                 toast.show();
                 finish(); //go back to prev activity
                 } else {
+                    System.out.println("amountText.getText() is null");
                     CharSequence text2 = "Please type receipt amount!";
                     Toast toast = Toast.makeText(context, text2, duration);
                     toast.show();
@@ -131,8 +133,6 @@ public class ReceiptImage extends AppCompatActivity {
 //        intent.setAction(Intent.ACTION_GET_CONTENT);
 //        intent.addCategory(Intent.CATEGORY_OPENABLE);
 //        startActivityForResult(intent, REQUEST_CODE);
-
-
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, REQUEST_CODE);
     }
