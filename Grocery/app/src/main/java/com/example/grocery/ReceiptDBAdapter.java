@@ -82,7 +82,7 @@ public class ReceiptDBAdapter {
     }
 
     /** update receipt */
-    public boolean updateReceipt(long rid, long d, float a, String u) {
+    public boolean updateReceipt(long rid, float a, long d, String u) {
         ContentValues cvalue = new ContentValues();
         cvalue.put(RECEIPT_AMOUNT, a);
         cvalue.put(RECEIPT_DATE, d);
@@ -92,8 +92,8 @@ public class ReceiptDBAdapter {
 
     // database query methods
     public Cursor getAllReceipts() {
-        return db.query(RECEIPT_TABLE, RECEIPT_COLS, null, null, null, null, null);
-        //return db.query(RECEIPT_TABLE, RECEIPT_COLS, RECEIPT_ID + "")
+        return db.query(RECEIPT_TABLE, RECEIPT_COLS, null, null, null, null, RECEIPT_DATE);
+        //return db.query(RECEIPT_TABLE, RECEIPT_COLS, null, null, null, null, null);
         //Cursor cursor = db.query(TABLE_TEXTS, columns, KEY_NAME + "=" + text_spinner1, null, null, null, null);
     }
 
@@ -113,7 +113,6 @@ public class ReceiptDBAdapter {
         // Receipt(float amount,long date)
         return new Receipt(cursor.getFloat(1), cursor.getLong(2), cursor.getString(3));
     }
-
 
     private static class ReceiptDBhelper extends SQLiteOpenHelper {
         // SQL statement to create a new database

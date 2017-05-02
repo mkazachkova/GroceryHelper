@@ -49,16 +49,16 @@ public class MainActivity extends AppCompatActivity
     public static ReceiptDBAdapter rdbAdapt;  // ref to our database
     public static int rcurrID; //current receipt ID
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        CharSequence text = "Swipe left when you place an item in your cart!";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(MainActivity.this, text, duration);
-        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.show();
-    }
+//    @Override
+//    public void onResume() {
+////        super.onResume();
+////        CharSequence text = "Swipe left when you place an item in your cart!";
+////        int duration = Toast.LENGTH_SHORT;
+////
+////        Toast toast = Toast.makeText(MainActivity.this, text, duration);
+////        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+////        toast.show();
+//    }
 
 
     @Override

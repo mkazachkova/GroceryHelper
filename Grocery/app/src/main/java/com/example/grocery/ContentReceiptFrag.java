@@ -64,7 +64,8 @@ public class ContentReceiptFrag extends Fragment {
         //Hide main activity floating button
         FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
         if (floatingActionButton != null) {
-            floatingActionButton.hide();
+            floatingActionButton.setVisibility(View.INVISIBLE);
+            //floatingActionButton.hide();
         }
         //init floating button (take pic)
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab_receipt);

@@ -52,7 +52,7 @@ public class ReceiptImage extends AppCompatActivity {
         //TODO: change this from accessing from database??
         imageView = (ImageView) findViewById(R.id.receipt_pic);
 
-        uri = "android.resource://com.example.grocery/drawable/select_image.png";
+        uri = "android.resource://com.example.grocery/drawable/select_image";
         //bmap = Uri.parse("android.resource://com.example.grocery/drawable/select_image.png");
         //System.out.println(bmap);
 
@@ -82,7 +82,7 @@ public class ReceiptImage extends AppCompatActivity {
             public void onClick(View view)
             {
                 Context context = ReceiptImage.this;
-                CharSequence text = "Save pressed!";
+                CharSequence text = "Save Pressed!";
                 int duration = Toast.LENGTH_SHORT;
 
                 Long milliseconds = cal.getTimeInMillis(); //date
@@ -99,15 +99,15 @@ public class ReceiptImage extends AppCompatActivity {
                 Long d = cal.getTimeInMillis(); //date
                 if (!amountText.getText().toString().isEmpty()) {
                     System.out.println("amountText.getText() is not null");
-                Float amt = Float.parseFloat(amountText.getText().toString()); //amount
+                    Float amt = Float.parseFloat(amountText.getText().toString()); //amount
 
-                //TODO: add imageURI
-                Receipt receipt = new Receipt(amt, milliseconds, uri); //save user's curr time if db not found?
-                MainActivity.rdbAdapt.insertReceipt(receipt);
+                    //TODO: add imageURI
+                    Receipt receipt = new Receipt(amt, milliseconds, uri); //save user's curr time if db not found?
+                    MainActivity.rdbAdapt.insertReceipt(receipt);
                     System.out.println("after insert receipt");
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                finish(); //go back to prev activity
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                    finish(); //go back to prev activity
                 } else {
                     System.out.println("amountText.getText() is null");
                     CharSequence text2 = "Please type receipt amount!";

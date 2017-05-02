@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -21,6 +23,7 @@ public class EditReceiptImage extends ReceiptImage {
     private ImageView img;
     private int currPos;
     private Cursor cursor;
+    private Uri picUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,13 @@ public class EditReceiptImage extends ReceiptImage {
             }
         });
 
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                update();
+            }
+        });
+
         currPos = MainActivity.rcurrID;
         cursor = MainActivity.rdbAdapt.getAllReceipts();
         cursor.move(cursor.getCount() - currPos);
@@ -55,7 +65,7 @@ public class EditReceiptImage extends ReceiptImage {
         amountText.setText(String.format("%.2f", cursor.getFloat(1)));
 
         //TODO:finish populating (image)
-        Uri picUri = Uri.parse(cursor.getString(3));
+        picUri = Uri.parse(cursor.getString(3));
         img = (ImageView)findViewById(R.id.receipt_pic);
         img.setImageURI(picUri);
         img.setVisibility(View.VISIBLE);
@@ -73,4 +83,59 @@ public class EditReceiptImage extends ReceiptImage {
         finish(); //go back to prev activity
     }
 
+
+    public void update() {
+        //toast message
+        Context context = EditReceiptImage.this;
+        CharSequence text = "Save Pressed!!!!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Calendar cal = Calendar.getInstance();
+        Long milliseconds = cal.getTimeInMillis();
+
+        //convert dateText back to Long
+        //SimpleDateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+
+//        try {
+//            Date d = f.parse(dateText.getText().toString());
+//            milliseconds = d.getTime();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+        Date d = null;
+        try {
+            SimpleDateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+            d = f.parse(dateText.getText().toString());
+            if (!dateText.getText().toString().equals(f.format(d))) {
+                d = null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (d == null) { //invalid date format
+            CharSequence text3 = "Please format date as MM/dd/yyyy";
+            Toast toast = Toast.makeText(context, text3, duration);
+            toast.show();
+        } else { //valid date format
+            milliseconds = d.getTime();
+        }
+
+        if (!amountText.getText().toString().isEmpty()) {
+            Float amt = Float.parseFloat(amountText.getText().toString()); //amount
+
+            //String uriString = picUri.toString();
+            System.out.println(uri);
+            System.out.println("uri should be printed");
+            MainActivity.rdbAdapt.updateReceipt(cursor.getLong(0), amt, milliseconds, uri);
+            System.out.println("after insert receipt");
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            finish(); //go back to prev activity
+        } else {
+            CharSequence text2 = "Please type receipt amount!";
+            Toast toast = Toast.makeText(context, text2, duration);
+            toast.show();
+        }
+    }
 }

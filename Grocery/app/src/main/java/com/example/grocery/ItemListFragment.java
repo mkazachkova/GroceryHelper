@@ -1,9 +1,11 @@
 package com.example.grocery;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -11,12 +13,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.AdapterView;
-import android.app.AlertDialog;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -288,5 +289,27 @@ public class ItemListFragment extends Fragment {
         int position = lv.getPositionForView(v);
         return position;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CharSequence text = "Swipe left when you place an item in your cart!";
+        int duration = Toast.LENGTH_SHORT;
+
+        //Toast toast = Toast.makeText(MainActivity.this, text, duration);
+        Toast toast = Toast.makeText(getActivity(), text, duration);
+        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+
+        //show floatingactionbutton
+        FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
+        if (floatingActionButton != null) {
+            System.out.println("fab is not null in item list fragment");
+            //floatingActionButton.show();
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 }
 
