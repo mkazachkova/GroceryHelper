@@ -382,5 +382,25 @@ public class ItemListFragment extends Fragment {
         int position = lv.getPositionForView(v);
         return position;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CharSequence text = "Swipe left when you place an item in your cart!";
+        int duration = Toast.LENGTH_SHORT;
+
+        //Toast toast = Toast.makeText(MainActivity.this, text, duration);
+        Toast toast = Toast.makeText(getActivity(), text, duration);
+        toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+
+        //show floatingactionbutton
+        FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
+        if (floatingActionButton != null) {
+            System.out.println("fab is not null in item list fragment");
+            //floatingActionButton.show();
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
+    }
 }
 
