@@ -45,7 +45,7 @@ public class GraphFrag extends Fragment {
         Cursor cursor = MainActivity.rdbAdapt.getAllReceipts();
         if (cursor.moveToFirst())
             do {
-                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2));
+                Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2),cursor.getString(3));
                 receiptItems.add(result); //puts in reverse order
                 System.out.println("count: "+count);
                 count ++;

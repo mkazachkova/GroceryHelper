@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity
         //dbAdaptExp.open();
 
         rdbAdapt = new ReceiptDBAdapter(this);
+       // rdbAdapt.clear();
         rdbAdapt.open();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);

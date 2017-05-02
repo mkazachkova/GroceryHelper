@@ -3,11 +3,7 @@ package com.example.grocery;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,7 +95,7 @@ public class ContentReceiptFrag extends Fragment {
         aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
         receiptListView.setAdapter(aa);
         getActivity().setTitle("Receipts");
-        //updateArray();
+        updateArray();
 
         receiptListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,33 +114,33 @@ public class ContentReceiptFrag extends Fragment {
         return rootView;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("inside onActivityResult");
-
-        if (requestCode == CAMERA_PIC_REQUEST) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-
-            //get uri from the bitmap
-            Uri tempURI = data.getData();
-            System.out.println(tempURI);
-            //Uri tempURI = getImageUri(context, photo);
-
-            //get actual path
-            //File finalFile = new File(getRealPathFromURI(tempURI));
-            //System.out.println(finalFile);
-            System.out.println("hello world");
-            //ImageView imageview = (ImageView) rootView.findViewById(R.id.ImageView01);
-            //imageview.setImageBitmap(image);
-        }
-    }
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        System.out.println("inside onActivityResult");
+//
+//        if (requestCode == CAMERA_PIC_REQUEST) {
+//            Bitmap photo = (Bitmap) data.getExtras().get("data");
+//
+//            //get uri from the bitmap
+//            Uri tempURI = data.getData();
+//            System.out.println(tempURI);
+//            //Uri tempURI = getImageUri(context, photo);
+//
+//            //get actual path
+//            //File finalFile = new File(getRealPathFromURI(tempURI));
+//            //System.out.println(finalFile);
+//            System.out.println("hello world");
+//            //ImageView imageview = (ImageView) rootView.findViewById(R.id.ImageView01);
+//            //imageview.setImageBitmap(image);
+//        }
+//    }
 
     //TODO: this method is not used.
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
+//    public Uri getImageUri(Context inContext, Bitmap inImage) {
+//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//        String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+//        return Uri.parse(path);
+//    }
 
 //    public String getRealPathFromURI(Uri uri) {
 //        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -155,18 +150,18 @@ public class ContentReceiptFrag extends Fragment {
 //    }
 
 
-    public String getRealPathFromURI(Uri contentUri) {
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } catch (Exception e) {
-            return contentUri.getPath();
-        }
-    }
+//    public String getRealPathFromURI(Uri contentUri) {
+//        try {
+//            String[] proj = {MediaStore.Images.Media.DATA};
+//
+//            Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            return cursor.getString(column_index);
+//        } catch (Exception e) {
+//            return contentUri.getPath();
+//        }
+//    }
 
 
     public void updateArray() {
@@ -192,7 +187,7 @@ public class ContentReceiptFrag extends Fragment {
         aa = new ReceiptAdapter(getActivity(), R.layout.receipt_item, receiptItems);
         receiptListView.setAdapter(aa);
         getActivity().setTitle("Receipts");
-//        updateArray();
+        updateArray();
 
     }
 

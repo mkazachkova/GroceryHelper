@@ -42,6 +42,9 @@ public class ReceiptImage extends AppCompatActivity {
 
         setTitle("Receipt");
 
+        //MainActivity.rdbAdapt.clear();
+
+
         Button cancel = (Button)findViewById(R.id.btn_delete);
         Button save = (Button)findViewById(R.id.btn_save);
         amountText = (EditText)findViewById(R.id.total);
@@ -100,6 +103,7 @@ public class ReceiptImage extends AppCompatActivity {
                 //TODO: add imageURI
                 Receipt receipt = new Receipt(amt, milliseconds, uri); //save user's curr time if db not found?
                 MainActivity.rdbAdapt.insertReceipt(receipt);
+                    System.out.println("after insert receipt");
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
                 finish(); //go back to prev activity
@@ -122,11 +126,15 @@ public class ReceiptImage extends AppCompatActivity {
 
     /* select image from the phone gallery */
     public void onClick(View View) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, REQUEST_CODE);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        startActivityForResult(intent, REQUEST_CODE);
+
+
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, REQUEST_CODE);
     }
 
     @Override

@@ -72,6 +72,7 @@ public class ReceiptAdapter extends ArrayAdapter<Receipt> {
         //receiptImage.setImageBitmap(bitmap);
 
         if (receipt.getUri() != null) {
+            System.out.println("receipt uri is not nulll");
             receiptImage.setImageURI(Uri.parse(receipt.getUri()));
             receiptImage.setVisibility(View.VISIBLE);
         }
