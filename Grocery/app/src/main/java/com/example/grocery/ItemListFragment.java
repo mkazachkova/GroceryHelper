@@ -253,6 +253,7 @@ public class ItemListFragment extends Fragment {
                 setTime.set(Calendar.HOUR, 8);
                 setTime.set(Calendar.MINUTE, 0);
                 setTime.set(Calendar.SECOND, 0);
+                setTime.set(Calendar.AM_PM, Calendar.AM);
 
                 long eightTime = setTime.getTimeInMillis();
                 long nowTime = currentTime.getTimeInMillis();
@@ -351,11 +352,18 @@ public class ItemListFragment extends Fragment {
     }
 
     private Notification getNotification(String content) {
+        Calendar wantTime = Calendar.getInstance();
+        wantTime.set(Calendar.HOUR, 8);
+        wantTime.set(Calendar.MINUTE, 0);
+        wantTime.set(Calendar.SECOND, 0);
+        wantTime.set(Calendar.AM_PM, Calendar.AM);
+        long numb = wantTime.getTimeInMillis();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity());
         builder.setContentTitle("Expiration Reminder");
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.ic_shopping);
-        Intent intent = new Intent(getActivity(), MainActivity.class);
+        builder.setWhen(numb);
+        Intent intent = new Intent(getActivity(), ItemListFragment.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(intent);
@@ -384,7 +392,7 @@ public class ItemListFragment extends Fragment {
         int position = lv.getPositionForView(v);
         return position;
     }
-
+/*
     @Override
     public void onResume() {
         super.onResume();
@@ -404,5 +412,6 @@ public class ItemListFragment extends Fragment {
             floatingActionButton.setVisibility(View.VISIBLE);
         }
     }
+    */
 }
 

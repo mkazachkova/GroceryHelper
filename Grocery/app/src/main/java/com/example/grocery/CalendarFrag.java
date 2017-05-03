@@ -74,11 +74,11 @@ public class CalendarFrag extends Fragment {
                     if(dateArrayList.get(i).getYear() == date.getYear() &&
                             dateArrayList.get(i).getMonth() == date.getMonth() &&
                             dateArrayList.get(i).getDate() == date.getDate()) {
-                        temp = i;
+                        temp = dateArrayList.size() - (i  + 1);
                     }
                 }
 
-                if(temp > 0) { //if there exists shopping
+                if(temp >= 0) { //if there exists shopping
                     MainActivity.rcurrID = temp;
                     Intent intent = new Intent(getActivity(), EditReceiptImage.class);
                     startActivity(intent);
