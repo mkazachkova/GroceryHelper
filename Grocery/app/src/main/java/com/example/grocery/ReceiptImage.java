@@ -18,10 +18,10 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.text.ParseException;
 
 /**
  * Created by Kiki on 4/21/17.
@@ -52,7 +52,7 @@ public class ReceiptImage extends AppCompatActivity {
         //TODO: change this from accessing from database??
         imageView = (ImageView) findViewById(R.id.receipt_pic);
 
-        uri = "android.resource://com.example.grocery/drawable/select_image";
+        uri = "android.resource://com.example.grocery/drawable/select_image2";
         //bmap = Uri.parse("android.resource://com.example.grocery/drawable/select_image.png");
         //System.out.println(bmap);
 
@@ -87,16 +87,33 @@ public class ReceiptImage extends AppCompatActivity {
 
                 Long milliseconds = cal.getTimeInMillis(); //date
 
+
+                //Long d = receipt.getDate();
+
+//                String date = new SimpleDateFormat("MM/dd/yyyy").format(new Date(d));
+
+//                String dateStr = dateText.getText().toString();
+//
+//                String[] dateParts = dateStr.split("/");
+//                String month = dateParts[0];
+//                String day = dateParts[1];
+//                String year = dateParts[2];
+
                 //convert dateText back to Long
                 SimpleDateFormat f = new SimpleDateFormat("MM/dd/yyyy");
                 try {
                     Date d = f.parse(dateText.getText().toString());
-                    milliseconds = d.getTime();
+                    milliseconds = d.getTime(); //user date
+                    if (!checkUniqueDate(milliseconds)) { //date already exists
+                        CharSequence text4 = "Date already exists!";
+                        Toast toast = Toast.makeText(context, text4, duration);
+                        toast.show();
+                        return;
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                Long d = cal.getTimeInMillis(); //date
                 if (!amountText.getText().toString().isEmpty()) {
                     System.out.println("amountText.getText() is not null");
                     Float amt = Float.parseFloat(amountText.getText().toString()); //amount
@@ -150,10 +167,6 @@ public class ReceiptImage extends AppCompatActivity {
                 bitmap = BitmapFactory.decodeStream(stream);
 
                 imageView.setImageBitmap(bitmap);
-                System.out.println("after imageView setImage");
-                //TODO: also need to setImageBitmap for the receipt instance.
-                System.out.println(data.getData());
-                System.out.println("after data.getData()");
                 uri = data.getData().toString(); //uri
 
             } catch (FileNotFoundException e) {
@@ -172,6 +185,33 @@ public class ReceiptImage extends AppCompatActivity {
         } catch (Exception e) {
             return contentUri.getPath();
         }
+    }
+
+    /* return true if the userDate is not already in the database; false otherwise */
+    public boolean checkUniqueDate(Long userDate) {
+        Long d = null;
+        Calendar c = Calendar.getInstance();
+        Cursor cursor = MainActivity.rdbAdapt.getAllReceipts();
+
+        Calendar userC = Calendar.getInstance();
+        userC.setTimeInMillis(userDate);
+
+        int uYear = userC.get(Calendar.YEAR);
+        int uMonth = userC.get(Calendar.MONTH);
+        int uDay = userC.get(Calendar.DAY_OF_MONTH);
+
+            while (cursor.moveToNext()) {
+                d = cursor.getLong(2);
+                c.setTimeInMillis(d);
+                int dYear = c.get(Calendar.YEAR);
+                int dMonth = c.get(Calendar.MONTH);
+                int dDay = c.get(Calendar.DAY_OF_MONTH);
+
+                if (uYear == dYear && uMonth == dMonth && uDay == dDay) {
+                    return false;
+                }
+            }
+            return true;
     }
 
 }

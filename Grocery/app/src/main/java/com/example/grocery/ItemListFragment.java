@@ -272,7 +272,7 @@ public class ItemListFragment extends Fragment {
 
                 if (pushDays != 0) {
                     GenerateNotifications generateNotifications =
-                            new GenerateNotifications(getNotification(pushName + " will expire soon!!!"), (int) total);
+                            new GenerateNotifications(getNotification(pushName + " will expire soon!!!"), 7000);
                     generateNotifications.start();
                 }
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
