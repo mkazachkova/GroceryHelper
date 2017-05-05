@@ -29,9 +29,9 @@ import java.util.Date;
 
 public class ReceiptImage extends AppCompatActivity {
 
-    private static final int REQUEST_CODE = 1;
-    private Bitmap bitmap;
-    private ImageView imageView;
+    protected static final int REQUEST_CODE = 1;
+    protected Bitmap bitmap;
+    protected ImageView imageView;
     private Calendar cal;
     protected EditText dateText, amountText;
     protected String uri;

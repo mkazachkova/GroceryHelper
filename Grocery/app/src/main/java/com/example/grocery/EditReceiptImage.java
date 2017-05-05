@@ -69,6 +69,7 @@ public class EditReceiptImage extends ReceiptImage {
         img = (ImageView)findViewById(R.id.receipt_pic);
         img.setImageURI(picUri);
         img.setVisibility(View.VISIBLE);
+        uri = picUri.toString();
     }
 
     public void delete() {
@@ -138,4 +139,5 @@ public class EditReceiptImage extends ReceiptImage {
             toast.show();
         }
     }
+
 }
