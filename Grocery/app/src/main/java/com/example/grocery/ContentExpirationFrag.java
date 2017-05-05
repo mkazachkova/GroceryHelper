@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -98,7 +100,7 @@ public class ContentExpirationFrag extends Fragment {
 
                 // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
-
+/*
                 final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
 
                 final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(act,
@@ -108,7 +110,11 @@ public class ContentExpirationFrag extends Fragment {
                 reminderSpinner.setAdapter(remindAdapter);
                 reminderSpinner.setSelection(castItem.getDays() - 1);
 
+*/              final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                daysScroll.setValue(castItem.getDays());
 
+                final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
+                quantityScroll.setVisibility(View.GONE);
 
                 Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                 delete.setOnClickListener(new View.OnClickListener(){
@@ -152,15 +158,17 @@ public class ContentExpirationFrag extends Fragment {
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
 
+                        int reminder = daysScroll.getValue();
+
                         String editedTitle = edt.getText().toString();
-                        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+                       // int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
 
                         dbAdapt.updateField(whyId,1,editedTitle);
                         dbAdapt.updateField(whyId,3,reminder+"");
 
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.detach(frag).attach(frag).commit();
-                        //updateArray();
+                       //updateArray();
                         b.dismiss();
 
 
@@ -168,8 +176,8 @@ public class ContentExpirationFrag extends Fragment {
                 });
 
 
-                Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-                quantitySpinner.setVisibility(View.GONE);
+          //      Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+           //     quantitySpinner.setVisibility(View.GONE);
 
                 /*final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
                         R.array.quantityTypes,android.R.layout.simple_spinner_item);

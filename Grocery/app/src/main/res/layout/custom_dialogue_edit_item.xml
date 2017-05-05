@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#a0c4fc"
@@ -40,12 +41,15 @@
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 
-        <Spinner
-            android:id="@+id/quantity_spinner"
+        <com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
+            android:id="@+id/number_picker_quantity"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:background="#a0c4fc"
-            android:visibility="visible" />
+            app:snp_minValue="1"
+            app:snp_orientation="horizontal"
+           />
+
+
 
 
     </LinearLayout>
@@ -65,12 +69,13 @@
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 
-        <Spinner
-            android:id="@+id/reminder_spinner"
+        <com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
+            android:id="@+id/number_picker_days"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:background="#a0c4fc"
-            android:visibility="visible" />
+            app:snp_minValue="0"
+            app:snp_orientation="horizontal"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -118,5 +123,6 @@
             android:textSize="20sp" />
 
     </LinearLayout>
+
 
 </LinearLayout>

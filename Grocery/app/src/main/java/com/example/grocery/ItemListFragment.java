@@ -27,7 +27,10 @@ import android.widget.AdapterView;
 import android.app.AlertDialog;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,6 +100,9 @@ public class ItemListFragment extends Fragment {
                 String idString = castItem.getID();
 
 
+
+
+
                 System.out.println(castItem.getName());
                 System.out.println(castItem.getDays());
                 System.out.println(castItem.getQuantity());
@@ -116,28 +122,35 @@ public class ItemListFragment extends Fragment {
                 final EditText edt = (EditText) dialogView.findViewById(R.id.editTitle);
                 edt.setText(castItem.getName());
 
+                final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                daysScroll.setValue(castItem.getDays());
+
+                final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
+                quantityScroll.setValue(castItem.getQuantity());
 
 
 
-                final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-
-                final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                quantitySpinner.setAdapter(quanAdapter);
-                quantitySpinner.setSelection(castItem.getQuantity() - 1);
 
 
+                //  final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
 
-                final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+                //final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
+                  //      R.array.quantityTypes,android.R.layout.simple_spinner_item);
+                //quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.reminderTypes,android.R.layout.simple_spinner_item);
-                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                //quantitySpinner.setAdapter(quanAdapter);
+                //quantitySpinner.setSelection(castItem.getQuantity() - 1);
 
-                reminderSpinner.setAdapter(remindAdapter);
-                reminderSpinner.setSelection(castItem.getDays());
+
+
+               // final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+
+               // final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(act,
+                 //       R.array.reminderTypes,android.R.layout.simple_spinner_item);
+                //remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                //reminderSpinner.setAdapter(remindAdapter);
+             //   reminderSpinner.setSelection(castItem.getDays());
 
                 Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
                 delete.setOnClickListener(new View.OnClickListener(){
@@ -171,18 +184,27 @@ public class ItemListFragment extends Fragment {
                 save.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view)
                     {
+
+
+                       // ScrollableNumberPicker a = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_vertical);
+                       // System.out.println("from scroll view: " + a.getValue());
+                       // a.setValue(4);
+
+
                         Context context = getActivity();
                         CharSequence text = "Save pressed!";
                         int duration = Toast.LENGTH_SHORT;
 
                         String editedTitle = edt.getText().toString();
-                        int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
-                        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+                     //   int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+                     //   int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
 
+                        int quantity = quantityScroll.getValue();
+                        int reminder = daysScroll.getValue();
 
                         System.out.println(editedTitle);
-                        System.out.println(quantity);
-                        System.out.println(reminder);
+                    //    System.out.println(quantity);
+                    //    System.out.println(reminder);
 
 
                         dbAdapt.updateField(whyId,1,editedTitle);

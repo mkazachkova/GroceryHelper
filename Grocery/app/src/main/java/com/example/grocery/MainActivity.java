@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
 
 
 public class MainActivity extends AppCompatActivity
@@ -97,6 +98,12 @@ public class MainActivity extends AppCompatActivity
 
                 final AlertDialog dialog = dialogBuilder.create();
 
+                final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                daysScroll.setValue(0);
+
+                final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
+                quantityScroll.setValue(1);
+
                 delete.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view)
                     {
@@ -118,12 +125,19 @@ public class MainActivity extends AppCompatActivity
                         CharSequence text = "Save pressed!";
                         int duration = Toast.LENGTH_SHORT;
 
-                      //  Toast toast = Toast.makeText(context, text, duration);
+
+
+
+                        //  Toast toast = Toast.makeText(context, text, duration);
                        // toast.show();
 
+
+
+                        int quantity = quantityScroll.getValue();
+                        int reminder = daysScroll.getValue();
                         String newTitle = title.getText().toString();
-                        int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
-                        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+        //                int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+        //                int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
 
                         if (newTitle.equals("")) {
                             Context context2 = MainActivity.this;
@@ -163,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-                quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+/*                quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
 
                 final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
                         R.array.quantityTypes,android.R.layout.simple_spinner_item);
@@ -182,7 +196,7 @@ public class MainActivity extends AppCompatActivity
 
                 reminderSpinner.setAdapter(remindAdapter);
                 reminderSpinner.setSelection(0);
-
+*/
 
                 b = dialogBuilder.create();
                 b.show();
@@ -294,16 +308,23 @@ public class MainActivity extends AppCompatActivity
 
                     final AlertDialog dialog = dialogBuilder.create();
 
+                    final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                    daysScroll.setValue(0);
+
+                    final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
+                    quantityScroll.setValue(1);
+
+
 
                     delete.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
                         {
                             Context context = MainActivity.this;
-                            CharSequence text = "Cancel Pressed!";
-                            int duration = Toast.LENGTH_SHORT;
+                         //   CharSequence text = "Cancel Pressed!";
+                         //   int duration = Toast.LENGTH_SHORT;
 
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
+                         //   Toast toast = Toast.makeText(context, text, duration);
+                         //   toast.show();
 
                             b.dismiss();
                         }
@@ -311,9 +332,9 @@ public class MainActivity extends AppCompatActivity
 
 
                     Button save = (Button) dialogView.findViewById(R.id.btn_save);
-                    final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+/*                    final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
                     final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-                    //save.setGravity(Gravity.RIGHT);
+*/                    //save.setGravity(Gravity.RIGHT);
 
                     save.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
@@ -327,8 +348,11 @@ public class MainActivity extends AppCompatActivity
 
 
                             String newTitle = title.getText().toString();
-                            int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
-                            int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+                   //         int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
+                    //        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+
+                            int quantity = quantityScroll.getValue();
+                            int reminder = daysScroll.getValue();
 
                             if (newTitle.equals("")) {
                                 Context context2 = MainActivity.this;
@@ -369,21 +393,21 @@ public class MainActivity extends AppCompatActivity
 
 
 
-                    final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-                            R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                    quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+ //                   final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+  //                          R.array.quantityTypes,android.R.layout.simple_spinner_item);
+   //                 quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                    quantitySpinner.setAdapter(quanAdapter);
-                    quantitySpinner.setSelection(0);
+ //                   quantitySpinner.setAdapter(quanAdapter);
+ //                   quantitySpinner.setSelection(0);
 
 
 
-                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-                            R.array.reminderTypes,android.R.layout.simple_spinner_item);
-                    remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+  //                          R.array.reminderTypes,android.R.layout.simple_spinner_item);
+    //                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                    reminderSpinner.setAdapter(remindAdapter);
-                    reminderSpinner.setSelection(0);
+//                    reminderSpinner.setAdapter(remindAdapter);
+  //                  reminderSpinner.setSelection(0);
 
                     b = dialogBuilder.create();
                     b.show();
@@ -417,13 +441,17 @@ public class MainActivity extends AppCompatActivity
                     final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                     dialogBuilder.setView(dialogView);
 
+                    Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
+                    delete.setText("Cancel");
+                    delete.setBackgroundColor(Color.GRAY);
                     // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
                     final AlertDialog dialog = dialogBuilder.create();
 
 
-                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-                    quantitySpinner.setVisibility(View.GONE);
+//                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
+  //
+                    //             quantitySpinner.setVisibility(View.GONE);
 
                 /*final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
                         R.array.quantityTypes,android.R.layout.simple_spinner_item);
@@ -434,16 +462,24 @@ public class MainActivity extends AppCompatActivity
 
 
 
-                    final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
+//                    final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
 
-                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-                            R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                    remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+ //                   final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
+   //                         R.array.quantityTypes,android.R.layout.simple_spinner_item);
+   //                 remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                    reminderSpinner.setAdapter(remindAdapter);
-                    reminderSpinner.setSelection(0);
+     //               reminderSpinner.setAdapter(remindAdapter);
+       //             reminderSpinner.setSelection(0);
 
-                    Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
+
+                    final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                    daysScroll.setValue(1);
+
+                    final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
+                    quantityScroll.setVisibility(View.GONE);
+
+
+
                     delete.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
                         {
@@ -477,7 +513,8 @@ public class MainActivity extends AppCompatActivity
                             toast.show();
 
 
-                            int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+                  //        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
+                            int reminder = daysScroll.getValue();
                             String newTitle = name.getText().toString();
 
 
