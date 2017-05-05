@@ -2,9 +2,11 @@ package com.example.grocery;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -43,7 +45,8 @@ public class MainActivity extends AppCompatActivity
     private Spinner reminderSpinner;
     private MyShoppingListDBAdapter dbAdapt;
     private AlertDialog b;
-
+    private static SharedPreferences myPrefs;
+    private static TextView itemsNumb;
     private static ItemListFragment itemFragment = new ItemListFragment();
     FloatingActionButton fab;
 
@@ -67,6 +70,8 @@ public class MainActivity extends AppCompatActivity
         dbAdapt = MyShoppingListDBAdapter.getInstance(MainActivity.this);
 //       dbAdapt.clear();
         dbAdapt.open();
+
+
 
        // dbAdaptExp = MyExpirationListDBAdapter.getInstance(MainActivity.this);
         //dbAdaptExp.open();
@@ -172,8 +177,23 @@ public class MainActivity extends AppCompatActivity
                             transaction.attach(itemFragment);
                             //transaction.addToBackStack(null);
                             transaction.commit();
-                        }
 
+                            int howMany = 0;
+                            Cursor curse = dbAdapt.getAllItems();
+                            if (curse.moveToFirst())
+                                do {
+                                    ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                                    if (result.inList) {
+                                        howMany++;
+                                    }
+                                } while (curse.moveToNext());
+
+                            SharedPreferences.Editor peditor = myPrefs.edit();
+                            peditor.putInt("ItemNumbers", howMany);
+                            peditor.commit();
+
+                            updateProgress();
+                        }
                     }
                 });
 
@@ -213,10 +233,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View headerView = navigationView.getHeaderView(0);
+        itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
 //        shoppingFrag = new ContentShoppingFrag();
         receiptsFrag = new ContentReceiptFrag();
         expirationFrag = new ContentExpirationFrag();
         statsFrag = new  ContentStatsFrag();
+
+        updateProgress();
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, itemFragment).commit();
@@ -226,24 +252,13 @@ public class MainActivity extends AppCompatActivity
        // fragmentTransaction.commit();
 
     }
-
+/*
     @Override
     public void onResume() {
         super.onResume();
-
-        Cursor curse = dbAdapt.getAllItems();
-        int listNumb = 0;
-        if (curse.moveToFirst())
-            do {
-                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
-                if (result.inList) {
-                    listNumb++;
-                }
-            } while (curse.moveToNext());
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        TextView itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
+*/
+    public static void updateProgress() {
+        int listNumb = myPrefs.getInt("ItemNumbers", 0);
         String lastNumbItem = Integer.toString(listNumb) + " Items";
         itemsNumb.setText(lastNumbItem);
         
@@ -386,6 +401,22 @@ public class MainActivity extends AppCompatActivity
                                 transaction.attach(itemFragment);
                               //  transaction.addToBackStack(null);
                                 transaction.commit();
+
+                                int howMany = 0;
+                                Cursor curse = dbAdapt.getAllItems();
+                                if (curse.moveToFirst())
+                                    do {
+                                        ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                                        if (result.inList) {
+                                            howMany++;
+                                        }
+                                    } while (curse.moveToNext());
+
+                                SharedPreferences.Editor peditor = myPrefs.edit();
+                                peditor.putInt("ItemNumbers", howMany);
+                                peditor.commit();
+
+                                updateProgress();
                             }
 
                         }

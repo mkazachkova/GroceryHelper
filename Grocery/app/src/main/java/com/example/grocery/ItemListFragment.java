@@ -7,9 +7,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -50,6 +52,7 @@ public class ItemListFragment extends Fragment {
     protected ShoppingAdapter shopAdapt;
     private AlertDialog b;
     private View view2;
+    private SharedPreferences myPrefs;
     int count = 0;
     int multiplier = 86400000;
 
@@ -67,6 +70,7 @@ public class ItemListFragment extends Fragment {
        // CharSequence text = "Swipe left when you place an item in your cart!";
         //int duration = Toast.LENGTH_SHORT;
 
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         dbAdapt = MyShoppingListDBAdapter.getInstance(getActivity().getApplicationContext());
     //    dbAdapt.clear();
         dbAdapt.open();
@@ -177,6 +181,7 @@ public class ItemListFragment extends Fragment {
                        // shoppingListView.setAdapter(shopAdapt);
                        // updateArray();
                         b.dismiss();
+                        onChange(view);
                     }
                 });
 
@@ -222,6 +227,7 @@ public class ItemListFragment extends Fragment {
                         //shoppingListView.setAdapter(shopAdapt);
                         //updateArray();
                         b.dismiss();
+                        onChange(view);
                     }
                 });
 
@@ -295,11 +301,15 @@ public class ItemListFragment extends Fragment {
 
                 if (pushDays != 0) {
                     GenerateNotifications generateNotifications =
-                            new GenerateNotifications(getNotification(pushName + " will expire soon!!!"), 7000);
+                            new GenerateNotifications(getNotification(pushName + " will expire soon!!!"),(int) total);
                     generateNotifications.start();
                 }
+
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.detach(frag).attach(frag).commit();
+
+                onChange(view2);
+
 
           //      Toast.makeText(getActivity(), "You have swiped left!", Toast.LENGTH_SHORT).show();
            //     listViewAdapter.remove(listViewAdapter.getItem(0));
@@ -335,6 +345,23 @@ public class ItemListFragment extends Fragment {
         myItems.add(two);
 
     }*/
+
+    public void onChange(View v) {
+        int howMany = 0;
+        Cursor curse = dbAdapt.getAllItems();
+        if (curse.moveToFirst())
+            do {
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                if (result.inList) {
+                    howMany++;
+                }
+            } while (curse.moveToNext());
+
+        SharedPreferences.Editor peditor = myPrefs.edit();
+        peditor.putInt("ItemNumbers", howMany);
+        peditor.commit();
+        MainActivity.updateProgress();
+    }
 
     class GenerateNotifications extends Thread{
 
