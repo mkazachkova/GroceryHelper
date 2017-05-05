@@ -234,6 +234,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        navigationView.getMenu().getItem(0).setChecked(true);
+
         View headerView = navigationView.getHeaderView(0);
         itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
         myPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
