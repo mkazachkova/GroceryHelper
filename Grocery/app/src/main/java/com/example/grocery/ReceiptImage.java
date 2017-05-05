@@ -52,6 +52,8 @@ public class ReceiptImage extends AppCompatActivity {
 
         //TODO: change this from accessing from database??
         imageView = (ImageView) findViewById(R.id.receipt_pic);
+        imageView.getLayoutParams().height = 700;
+        imageView.getLayoutParams().width =  600;
 
         uri = "android.resource://com.example.grocery/drawable/select_image2";
         //bmap = Uri.parse("android.resource://com.example.grocery/drawable/select_image.png");
