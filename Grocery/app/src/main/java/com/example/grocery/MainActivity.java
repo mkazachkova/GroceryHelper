@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -49,12 +48,14 @@ public class MainActivity extends AppCompatActivity
 
     public static ReceiptDBAdapter rdbAdapt;  // ref to our database
     public static int rcurrID; //current receipt ID
+    public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         CharSequence text = "Swipe left when you place an item in your cart!";
@@ -230,6 +231,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+
+        //TODO: enable toolbar?
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         Cursor curse = dbAdapt.getAllItems();
         int listNumb = 0;
