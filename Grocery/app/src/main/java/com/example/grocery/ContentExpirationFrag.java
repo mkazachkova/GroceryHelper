@@ -113,6 +113,8 @@ public class ContentExpirationFrag extends Fragment {
 */              final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
                 daysScroll.setValue(castItem.getDays());
 
+                daysScroll.setMinValue(1);
+
                 final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
                 quantityScroll.setVisibility(View.GONE);
 
