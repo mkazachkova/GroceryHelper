@@ -24,6 +24,7 @@ public class GraphFrag extends Fragment {
     protected static ArrayList<Receipt> receiptItems;
     private int count;
     private String temp;
+    private int size;
 
     public static GraphFrag newInstance() {
         GraphFrag fragment = new GraphFrag();
@@ -41,15 +42,27 @@ public class GraphFrag extends Fragment {
         count = 0;
         View view = inflater.inflate(R.layout.statistics_graph_fragment, container, false);
 
+
+
+
         receiptItems = new ArrayList<Receipt>();
         Cursor cursor = MainActivity.rdbAdapt.getAllReceipts();
-        if (cursor.moveToFirst())
+        int count2 = cursor.getCount();
+
+        int newVal = 0;
+        if (count2 < 4) {
+            newVal = count2;
+        } else {
+            newVal = 4;
+        }
+
+        if (cursor.moveToLast())
             do {
                 Receipt result = new Receipt(cursor.getFloat(1), cursor.getLong(2),cursor.getString(3));
                 receiptItems.add(result); //puts in reverse order
                 System.out.println("count: "+count);
                 count ++;
-            } while (cursor.moveToNext() && count <4);
+            } while (cursor.moveToPrevious() && count <newVal);
         cursor.close();
 
 
@@ -72,7 +85,7 @@ public class GraphFrag extends Fragment {
 
         ArrayList<BarEntry> set = new ArrayList<>();
         for (int i = 0; i < receiptItems.size(); i++) {
-            set.add(new BarEntry(receiptItems.get(i).getAmount(), 3 -i));
+            set.add(new BarEntry(receiptItems.get(i).getAmount(), (receiptItems.size() -1) -i));
             System.out.println("amount: "+receiptItems.get(i).getAmount()+ " , date: "+ dateFormat.format(receiptItems.get(i).getDate()));
         }
 
