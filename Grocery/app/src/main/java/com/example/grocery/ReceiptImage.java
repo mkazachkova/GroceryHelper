@@ -44,6 +44,7 @@ public class ReceiptImage extends AppCompatActivity {
 
         //MainActivity.rdbAdapt.clear();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         Button cancel = (Button)findViewById(R.id.btn_delete);
         Button save = (Button)findViewById(R.id.btn_save);

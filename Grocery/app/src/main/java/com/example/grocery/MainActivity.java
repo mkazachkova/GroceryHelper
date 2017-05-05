@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -52,12 +51,14 @@ public class MainActivity extends AppCompatActivity
 
     public static ReceiptDBAdapter rdbAdapt;  // ref to our database
     public static int rcurrID; //current receipt ID
+    public Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         CharSequence text = "Swipe left when you place an item in your cart!";
@@ -259,6 +260,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+
+        //TODO: enable toolbar?
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        Cursor curse = dbAdapt.getAllItems();
+        int listNumb = 0;
+        if (curse.moveToFirst())
+            do {
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                if (result.inList) {
+                    listNumb++;
+                }
+            } while (curse.moveToNext());
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        TextView itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
 */
     public static void updateProgress() {
         int listNumb = myPrefs.getInt("ItemNumbers", 0);
