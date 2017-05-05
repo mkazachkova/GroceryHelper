@@ -42,7 +42,6 @@ public class ReceiptImage extends AppCompatActivity {
 
         setTitle("Receipt");
 
-        //MainActivity.rdbAdapt.clear();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
@@ -56,13 +55,6 @@ public class ReceiptImage extends AppCompatActivity {
         imageView.getLayoutParams().width =  600;
 
         uri = "android.resource://com.example.grocery/drawable/select_image2";
-        //bmap = Uri.parse("android.resource://com.example.grocery/drawable/select_image.png");
-        //System.out.println(bmap);
-
-        //imageView.setVisibility(View.INVISIBLE);
-        //System.out.println("receipt image should be invisible");
-
-        //set default Date (get date)
         dateText = (EditText) findViewById(R.id.date);
         resetView(); //set amount, date to empty
         cal = Calendar.getInstance();
@@ -71,12 +63,6 @@ public class ReceiptImage extends AppCompatActivity {
 
         cancel.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
-                Context context = ReceiptImage.this;
-                CharSequence text = "Cancel Pressed!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
                 finish(); //go back to prev activity
             }
         });
@@ -90,17 +76,6 @@ public class ReceiptImage extends AppCompatActivity {
 
                 Long milliseconds = cal.getTimeInMillis(); //date
 
-
-                //Long d = receipt.getDate();
-
-//                String date = new SimpleDateFormat("MM/dd/yyyy").format(new Date(d));
-
-//                String dateStr = dateText.getText().toString();
-//
-//                String[] dateParts = dateStr.split("/");
-//                String month = dateParts[0];
-//                String day = dateParts[1];
-//                String year = dateParts[2];
 
                 //convert dateText back to Long
                 SimpleDateFormat f = new SimpleDateFormat("MM/dd/yyyy");
@@ -118,7 +93,7 @@ public class ReceiptImage extends AppCompatActivity {
                 }
 
                 if (!amountText.getText().toString().isEmpty()) {
-                    System.out.println("amountText.getText() is not null");
+                 //   System.out.println("amountText.getText() is not null");
                     Float amt = Float.parseFloat(amountText.getText().toString()); //amount
 
                     //TODO: add imageURI
@@ -126,7 +101,7 @@ public class ReceiptImage extends AppCompatActivity {
                     MainActivity.rdbAdapt.insertReceipt(receipt);
                     System.out.println("after insert receipt");
                     Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+               //     toast.show();
                     finish(); //go back to prev activity
                 } else {
                     System.out.println("amountText.getText() is null");
@@ -148,11 +123,6 @@ public class ReceiptImage extends AppCompatActivity {
 
     /* select image from the phone gallery */
     public void onClick(View View) {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
-//        startActivityForResult(intent, REQUEST_CODE);
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, REQUEST_CODE);
     }

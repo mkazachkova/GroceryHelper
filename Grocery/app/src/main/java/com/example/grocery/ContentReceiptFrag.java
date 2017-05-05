@@ -35,15 +35,6 @@ public class ContentReceiptFrag extends Fragment {
     private int CAMERA_PIC_REQUEST;
     //private SharedPreferences myPrefs;
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//
-//        // Inflate the layout for this fragment
-//        View view =  inflater.inflate(R.layout.receipts_main_fragment, container, false);
-//        getActivity().setTitle("My Receipts");
-//        return view;
-//    }
 
     public ContentReceiptFrag() {
         // Required empty public constructor
@@ -75,20 +66,10 @@ public class ContentReceiptFrag extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ReceiptImage.class);
                 startActivity(intent);
-                //System.out.println("should open phone camera");
-                //TODO: this was working earlier (open default android phone camera)
-                //Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                //startActivity(intent);
-
-//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-////                startActivity(cameraIntent);
-//                startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 
             }
         });
 
-        //dbAdapt = DriveLogDBAdapter.getInstance(getActivity().getApplicationContext());
-        //dbAdapt.open();
 
         receiptListView = (ListView) rootView.findViewById(R.id.receipt_list_view);
         receiptItems = new ArrayList<Receipt>();
@@ -114,55 +95,6 @@ public class ContentReceiptFrag extends Fragment {
 
         return rootView;
     }
-
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        System.out.println("inside onActivityResult");
-//
-//        if (requestCode == CAMERA_PIC_REQUEST) {
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//
-//            //get uri from the bitmap
-//            Uri tempURI = data.getData();
-//            System.out.println(tempURI);
-//            //Uri tempURI = getImageUri(context, photo);
-//
-//            //get actual path
-//            //File finalFile = new File(getRealPathFromURI(tempURI));
-//            //System.out.println(finalFile);
-//            System.out.println("hello world");
-//            //ImageView imageview = (ImageView) rootView.findViewById(R.id.ImageView01);
-//            //imageview.setImageBitmap(image);
-//        }
-//    }
-
-    //TODO: this method is not used.
-//    public Uri getImageUri(Context inContext, Bitmap inImage) {
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-//        String path = Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-//        return Uri.parse(path);
-//    }
-
-//    public String getRealPathFromURI(Uri uri) {
-//        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-//        cursor.moveToFirst();
-//        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-//        return cursor.getString(idx);
-//    }
-
-
-//    public String getRealPathFromURI(Uri contentUri) {
-//        try {
-//            String[] proj = {MediaStore.Images.Media.DATA};
-//
-//            Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            cursor.moveToFirst();
-//            return cursor.getString(column_index);
-//        } catch (Exception e) {
-//            return contentUri.getPath();
-//        }
-//    }
 
 
     public void updateArray() {
@@ -216,10 +148,6 @@ public class ContentReceiptFrag extends Fragment {
         }
 
 
-        //for (int i = 0; i < amount.length; i++) {
-            //Receipt temp = new Receipt(amount[i], date[i]);
-            //rList.add(temp);
-        //}
         return rList;
     }
 
@@ -235,16 +163,6 @@ public class ContentReceiptFrag extends Fragment {
         // Apply any required UI change now that the Fragment is visible.
     }
 
-//    // Called at the start of the active lifetime.
-//    @Override
-//    public void onResume(){
-//        super.onResume();
-//        Log.d ("Content Fragment", "onResume");
-//        // Resume any paused UI updates, threads, or processes required
-//        // by the Fragment but suspended when it became inactive.
-//    }
-
-    // Called at the end of the active lifetime.
     @Override
     public void onPause(){
         Log.d ("Content Fragment", "onPause");

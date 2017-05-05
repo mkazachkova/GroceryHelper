@@ -98,19 +98,7 @@ public class ContentExpirationFrag extends Fragment {
                 final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
                 dialogBuilder.setView(dialogView);
 
-                // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
-
-/*
-                final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-
-                final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                reminderSpinner.setAdapter(remindAdapter);
-                reminderSpinner.setSelection(castItem.getDays() - 1);
-
-*/              final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
                 daysScroll.setValue(castItem.getDays());
 
                 daysScroll.setMinValue(1);
@@ -127,7 +115,7 @@ public class ContentExpirationFrag extends Fragment {
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                       // toast.show();
 
 
                         if (castItem.inList()) {
@@ -158,7 +146,7 @@ public class ContentExpirationFrag extends Fragment {
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                     //   toast.show();
 
                         int reminder = daysScroll.getValue();
 
@@ -176,18 +164,6 @@ public class ContentExpirationFrag extends Fragment {
 
                     }
                 });
-
-
-          //      Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-           //     quantitySpinner.setVisibility(View.GONE);
-
-                /*final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                quantitySpinner.setAdapter(quanAdapter);
-                quantitySpinner.setSelection(0);*/
-
 
 
 
@@ -286,19 +262,4 @@ public class ContentExpirationFrag extends Fragment {
     }
 
 
-/*
-    public void populateItems() {
-        ShoppingItem one = new ShoppingItem("Chicken breast", 1, 3);
-        ShoppingItem two = new ShoppingItem("Salmon", 1, 2);
-        ShoppingItem three = new ShoppingItem("Peppers", 1, 7);
-        ShoppingItem four = new ShoppingItem("Shrimp", 1, 7);
-
-
-        myItems = new ArrayList<ShoppingItem>();
-        myItems.add(one);
-        myItems.add(three);
-        myItems.add(two);
-        myItems.add(four);
-
-    }*/
 }

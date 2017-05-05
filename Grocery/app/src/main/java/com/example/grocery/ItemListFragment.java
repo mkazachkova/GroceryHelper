@@ -125,8 +125,6 @@ public class ItemListFragment extends Fragment {
                         CharSequence text = "Delete Pressed!";
                         int duration = Toast.LENGTH_SHORT;
 
-                      //  Toast toast = Toast.makeText(context, text, duration);
-                      //  toast.show();
 
                         if (castItem.reminderDays >= 1) {
                             dbAdapt.updateField(whyId,5,false+""); //represents that is no longer in shopping list
@@ -192,10 +190,10 @@ public class ItemListFragment extends Fragment {
 
         shoppingListView.setOnTouchListener(new OnSwipeTouchListener(getActivity(),listViewAdapter,listView) {
             public void onSwipeTop() {
-                Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
             }
             public void onSwipeRight() {
-                Toast.makeText(getActivity(), "right", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getActivity(), "right", Toast.LENGTH_SHORT).show();
             }
             public void onSwipeLeft() {
                 ShoppingItem swiped = getItemFromSwipe();
@@ -248,7 +246,7 @@ public class ItemListFragment extends Fragment {
 
             }
             public void onSwipeBottom() {
-                Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
             }
         });
 

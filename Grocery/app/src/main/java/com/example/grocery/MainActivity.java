@@ -34,14 +34,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-  //  private Fragment shoppingFrag;
     private Fragment receiptsFrag;
     private Fragment expirationFrag;
     private Fragment statsFrag;
     private Fragment settingsFrag;
     private FragmentTransaction transaction;
-    private Spinner quantitySpinner;
-    private Spinner reminderSpinner;
     private MyShoppingListDBAdapter dbAdapt;
     private AlertDialog b;
     private static SharedPreferences myPrefs;
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         CharSequence text = "Swipe left when you place an item in your cart!";
-        int duration = Toast.LENGTH_SHORT;
+        int duration = Toast.LENGTH_LONG;
 
         Toast toast = Toast.makeText(MainActivity.this, text, duration);
         toast.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
@@ -72,10 +69,6 @@ public class MainActivity extends AppCompatActivity
 //       dbAdapt.clear();
         dbAdapt.open();
 
-
-
-       // dbAdaptExp = MyExpirationListDBAdapter.getInstance(MainActivity.this);
-        //dbAdaptExp.open();
 
         rdbAdapt = new ReceiptDBAdapter(this);
        // rdbAdapt.clear();
@@ -118,7 +111,7 @@ public class MainActivity extends AppCompatActivity
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                     //   toast.show();
                         b.dismiss();
                     }
                 });
@@ -132,18 +125,9 @@ public class MainActivity extends AppCompatActivity
                         int duration = Toast.LENGTH_SHORT;
 
 
-
-
-                        //  Toast toast = Toast.makeText(context, text, duration);
-                       // toast.show();
-
-
-
                         int quantity = quantityScroll.getValue();
                         int reminder = daysScroll.getValue();
                         String newTitle = title.getText().toString();
-        //                int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
-        //                int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
 
                         if (newTitle.equals("")) {
                             Context context2 = MainActivity.this;
@@ -198,26 +182,6 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-/*                quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-
-                final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                quantitySpinner.setAdapter(quanAdapter);
-                quantitySpinner.setSelection(0);
-
-
-
-                reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-
-                final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-                        R.array.reminderTypes,android.R.layout.simple_spinner_item);
-                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                reminderSpinner.setAdapter(remindAdapter);
-                reminderSpinner.setSelection(0);
-*/
 
                 b = dialogBuilder.create();
                 b.show();
@@ -241,7 +205,6 @@ public class MainActivity extends AppCompatActivity
         itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
         myPrefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
-//        shoppingFrag = new ContentShoppingFrag();
         receiptsFrag = new ContentReceiptFrag();
         expirationFrag = new ContentExpirationFrag();
         statsFrag = new  ContentStatsFrag();
@@ -251,41 +214,14 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, itemFragment).commit();
 
-       // android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-       // fragmentTransaction.replace(R.id.content_frame, itemFragment);
-       // fragmentTransaction.commit();
 
     }
-/*
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        //TODO: enable toolbar?
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       // getActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        Cursor curse = dbAdapt.getAllItems();
-        int listNumb = 0;
-        if (curse.moveToFirst())
-            do {
-                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
-                if (result.inList) {
-                    listNumb++;
-                }
-            } while (curse.moveToNext());
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        TextView itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
-*/
     public static void updateProgress() {
         int listNumb = myPrefs.getInt("ItemNumbers", 0);
         String lastNumbItem = Integer.toString(listNumb) + " Items";
         itemsNumb.setText(lastNumbItem);
-        
-        //TODO: refresh the navdrawer
+
     }
 
     @Override
@@ -358,21 +294,12 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(View view)
                         {
                             Context context = MainActivity.this;
-                         //   CharSequence text = "Cancel Pressed!";
-                         //   int duration = Toast.LENGTH_SHORT;
-
-                         //   Toast toast = Toast.makeText(context, text, duration);
-                         //   toast.show();
-
                             b.dismiss();
                         }
                     });
 
 
                     Button save = (Button) dialogView.findViewById(R.id.btn_save);
-/*                    final Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-                    final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-*/                    //save.setGravity(Gravity.RIGHT);
 
                     save.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
@@ -382,12 +309,10 @@ public class MainActivity extends AppCompatActivity
                             int duration = Toast.LENGTH_SHORT;
 
                             Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
+                         //   toast.show();
 
 
                             String newTitle = title.getText().toString();
-                   //         int quantity = Integer.parseInt(quantitySpinner.getItemAtPosition(quantitySpinner.getSelectedItemPosition()).toString());
-                    //        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
 
                             int quantity = quantityScroll.getValue();
                             int reminder = daysScroll.getValue();
@@ -419,10 +344,8 @@ public class MainActivity extends AppCompatActivity
 
                                 b.dismiss();
                                 transaction = getSupportFragmentManager().beginTransaction();
-                              //  transaction.replace(R.id.fragment_container, itemFragment);
                                 transaction.detach(itemFragment);
                                 transaction.attach(itemFragment);
-                              //  transaction.addToBackStack(null);
                                 transaction.commit();
 
                                 int howMany = 0;
@@ -444,24 +367,6 @@ public class MainActivity extends AppCompatActivity
 
                         }
                     });
-
-
-
- //                   final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-  //                          R.array.quantityTypes,android.R.layout.simple_spinner_item);
-   //                 quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
- //                   quantitySpinner.setAdapter(quanAdapter);
- //                   quantitySpinner.setSelection(0);
-
-
-
-//                    final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-  //                          R.array.reminderTypes,android.R.layout.simple_spinner_item);
-    //                remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-//                    reminderSpinner.setAdapter(remindAdapter);
-  //                  reminderSpinner.setSelection(0);
 
                     b = dialogBuilder.create();
                     b.show();
@@ -503,29 +408,6 @@ public class MainActivity extends AppCompatActivity
                     final AlertDialog dialog = dialogBuilder.create();
 
 
-//                    Spinner quantitySpinner = (Spinner) dialogView.findViewById(R.id.quantity_spinner);
-  //
-                    //             quantitySpinner.setVisibility(View.GONE);
-
-                /*final ArrayAdapter<CharSequence> quanAdapter = ArrayAdapter.createFromResource(act,
-                        R.array.quantityTypes,android.R.layout.simple_spinner_item);
-                quanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                quantitySpinner.setAdapter(quanAdapter);
-                quantitySpinner.setSelection(0);*/
-
-
-
-//                    final Spinner reminderSpinner = (Spinner) dialogView.findViewById(R.id.reminder_spinner);
-
- //                   final ArrayAdapter<CharSequence> remindAdapter = ArrayAdapter.createFromResource(MainActivity.this,
-   //                         R.array.quantityTypes,android.R.layout.simple_spinner_item);
-   //                 remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-     //               reminderSpinner.setAdapter(remindAdapter);
-       //             reminderSpinner.setSelection(0);
-
-
                     final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
                     daysScroll.setValue(1);
 
@@ -537,12 +419,6 @@ public class MainActivity extends AppCompatActivity
                     delete.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View view)
                         {
-                          //  Context context = MainActivity.this;
-                           // CharSequence text = "Delete Pressed!";
-                            //int duration = Toast.LENGTH_SHORT;
-
-                        //    Toast toast = Toast.makeText(context, text, duration);
-                        //    toast.show();
                             b.dismiss();
                         }
                     });
@@ -564,10 +440,9 @@ public class MainActivity extends AppCompatActivity
                             int duration = Toast.LENGTH_SHORT;
 
                             Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
+                           // toast.show();
 
 
-                  //        int reminder = Integer.parseInt(reminderSpinner.getItemAtPosition(reminderSpinner.getSelectedItemPosition()).toString());
                             int reminder = daysScroll.getValue();
                             String newTitle = name.getText().toString();
 
@@ -599,10 +474,8 @@ public class MainActivity extends AppCompatActivity
 
                                 b.dismiss();
                                 transaction = getSupportFragmentManager().beginTransaction();
-                                //  transaction.replace(R.id.fragment_container, itemFragment);
                                 transaction.detach(expirationFrag);
                                 transaction.attach(expirationFrag);
-                                //  transaction.addToBackStack(null);
                                 transaction.commit();
                             }
 
@@ -630,7 +503,6 @@ public class MainActivity extends AppCompatActivity
 
     public String checkIfExists(String name) {
         Cursor curse = dbAdapt.getAllItems();
-        //  myItems.clear();
         if (curse.moveToFirst())
             do {
                 ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
@@ -639,7 +511,6 @@ public class MainActivity extends AppCompatActivity
                 }
             } while (curse.moveToNext());
         return "";
-        // shopAdapt.notifyDataSetChanged();
     }
 
     public FloatingActionButton getFloatingActionButton() {

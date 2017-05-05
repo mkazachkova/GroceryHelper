@@ -78,7 +78,7 @@ public class EditReceiptImage extends ReceiptImage {
         CharSequence text = "Delete Pressed!";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+       // toast.show();
 
         MainActivity.rdbAdapt.removeReceipt(cursor.getLong(0)); //delete from database
         finish(); //go back to prev activity
@@ -94,15 +94,6 @@ public class EditReceiptImage extends ReceiptImage {
         Calendar cal = Calendar.getInstance();
         Long milliseconds = cal.getTimeInMillis();
 
-        //convert dateText back to Long
-        //SimpleDateFormat f = new SimpleDateFormat("MM/dd/yyyy");
-
-//        try {
-//            Date d = f.parse(dateText.getText().toString());
-//            milliseconds = d.getTime();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
 
         Date d = null;
         try {
@@ -131,7 +122,7 @@ public class EditReceiptImage extends ReceiptImage {
             MainActivity.rdbAdapt.updateReceipt(cursor.getLong(0), amt, milliseconds, uri);
             System.out.println("after insert receipt");
             Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+         //   toast.show();
             finish(); //go back to prev activity
         } else {
             CharSequence text2 = "Please type receipt amount!";

@@ -14,10 +14,7 @@ public class Receipt {
         // Empty Constructor
     }
 
-//    public Receipt(float amount,long date) { //param for image?
-//        this.amount = amount;
-//        this.date =date;
-//    }
+
 
     public Receipt(float amount, long date, String uri) {
         this.amount = amount;
