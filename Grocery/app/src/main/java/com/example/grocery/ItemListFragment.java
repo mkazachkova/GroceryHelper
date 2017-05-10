@@ -10,9 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -25,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
@@ -46,15 +50,142 @@ public class ItemListFragment extends Fragment {
     protected ShoppingAdapter shopAdapt;
     private AlertDialog b;
     private View view2;
-    private SharedPreferences myPrefs;
+    private static SharedPreferences myPrefs;
     int count = 0;
     int multiplier = 86400000;
+    FloatingActionButton fab;
+    private FragmentTransaction transaction;
+    private static TextView itemsNumb;
 
     public ItemListFragment() {
         // Required empty public constructor
     }
 
 
+
+    public void onResume() {
+        super.onResume();
+        final Fragment currFrag = this;
+        fab = ((MainActivity) getActivity()).getFloatingActionButton();
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater =  getActivity().getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
+                dialogBuilder.setView(dialogView);
+
+                final EditText title = (EditText) dialogView.findViewById(R.id.editTitle);
+                title.setText("");
+                title.setHint("Enter Item Name");
+
+                Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
+                delete.setText("Cancel");
+                delete.setBackgroundColor(Color.GRAY);
+
+                Button save = (Button) dialogView.findViewById(R.id.btn_save);
+
+                final AlertDialog dialog = dialogBuilder.create();
+
+                final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                daysScroll.setValue(0);
+
+                final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
+                quantityScroll.setValue(1);
+
+                delete.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        Context context = getActivity();
+                        CharSequence text = "Cancel Pressed!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        //   toast.show();
+                        b.dismiss();
+                    }
+                });
+
+
+                save.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        Context context = getActivity();
+                        CharSequence text = "Save pressed!";
+                        int duration = Toast.LENGTH_SHORT;
+
+
+                        int quantity = quantityScroll.getValue();
+                        int reminder = daysScroll.getValue();
+                        String newTitle = title.getText().toString();
+
+                        if (newTitle.equals("")) {
+                            Context context2 = getActivity();
+                            CharSequence text2 = "Must enter item name in order to save item";
+                            int duration2 = Toast.LENGTH_SHORT;
+
+                            Toast toast2 = Toast.makeText(context2, text2, duration2);
+                            toast2.show();
+                        } else {
+                            System.out.println("should be adding to database");
+
+                            String returned = checkIfExists(newTitle);
+                            if (returned.equals("")) {
+                                ShoppingItem temp = new ShoppingItem(newTitle, quantity,reminder, "", true);
+                                long id = dbAdapt.insertItem(temp);
+                                System.out.println("this is the returned id: " + id);
+                                boolean suc = dbAdapt.updateField(id, 4, id+"");
+                                System.out.println(suc);
+                                ShoppingItem t = dbAdapt.getItem(id);
+                                System.out.println("the iID here is: " + t.getID());
+                                System.out.println("this is the returned status: " + t.inList());
+                            } else {
+                                dbAdapt.updateField(Long.parseLong(returned), 2, quantity+"");
+                                dbAdapt.updateField(Long.parseLong(returned), 5, true+"");
+                            }
+
+                            b.dismiss();
+
+                            transaction = getFragmentManager().beginTransaction();
+                            //   transaction.replace(R.id.fragment_container, itemFragment);
+                            transaction.detach(currFrag);
+                            transaction.attach(currFrag);
+                            //transaction.addToBackStack(null);
+                            transaction.commit();
+
+                            int howMany = 0;
+                            Cursor curse = dbAdapt.getAllItems();
+                            if (curse.moveToFirst())
+                                do {
+                                    ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                                    if (result.inList) {
+                                        howMany++;
+                                    }
+                                } while (curse.moveToNext());
+
+                            SharedPreferences.Editor peditor = myPrefs.edit();
+                            peditor.putInt("ItemNumbers", howMany);
+                            peditor.commit();
+
+                            updateProgress();
+                        }
+                    }
+                });
+
+
+                b = dialogBuilder.create();
+                b.show();
+            }
+        });
+
+
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -347,6 +478,25 @@ public class ItemListFragment extends Fragment {
         ListView lv = (ListView) view2.findViewById(R.id.itemsList);
         int position = lv.getPositionForView(v);
         return position;
+    }
+
+    public String checkIfExists(String name) {
+        Cursor curse = dbAdapt.getAllItems();
+        if (curse.moveToFirst())
+            do {
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                if (result.getName().equalsIgnoreCase(name)) { //only add if has reminder day set for it
+                    return result.getID();  // puts in reverse order
+                }
+            } while (curse.moveToNext());
+        return "";
+    }
+
+    public static void updateProgress() {
+        int listNumb = myPrefs.getInt("ItemNumbers", 0);
+        String lastNumbItem = Integer.toString(listNumb) + " Items";
+        itemsNumb.setText(lastNumbItem);
+
     }
 
 }

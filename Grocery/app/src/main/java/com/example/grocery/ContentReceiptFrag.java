@@ -45,6 +45,9 @@ public class ContentReceiptFrag extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class ContentReceiptFrag extends Fragment {
         FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
         if (floatingActionButton != null) {
             floatingActionButton.setVisibility(View.INVISIBLE);
-            //floatingActionButton.hide();
+     //       floatingActionButton.hide();
         }
         //init floating button (take pic)
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab_receipt);
@@ -69,6 +72,8 @@ public class ContentReceiptFrag extends Fragment {
 
             }
         });
+
+
 
 
         receiptListView = (ListView) rootView.findViewById(R.id.receipt_list_view);

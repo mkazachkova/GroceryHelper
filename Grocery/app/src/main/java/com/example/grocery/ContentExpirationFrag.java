@@ -3,7 +3,9 @@ package com.example.grocery;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -36,6 +38,9 @@ public class ContentExpirationFrag extends Fragment {
     private MyShoppingListDBAdapter dbAdapt;
     private ExpirationListAdapter shopAdapt;
     private AlertDialog b;
+    FloatingActionButton fab;
+    private FragmentTransaction transaction;
+
 
 
     @Override
@@ -186,9 +191,107 @@ public class ContentExpirationFrag extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        Log.d ("Content Fragment", "onResume");
-        // Resume any paused UI updates, threads, or processes required
-        // by the Fragment but suspended when it became inactive.
+        final Fragment currFrag = this;
+        fab = ((MainActivity) getActivity()).getFloatingActionButton();
+        fab.setVisibility(View.VISIBLE);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater =  getActivity().getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.custom_dialogue_edit_item, null);
+                dialogBuilder.setView(dialogView);
+
+                Button delete = (Button) dialogView.findViewById(R.id.btn_delete);
+                delete.setText("Cancel");
+                delete.setBackgroundColor(Color.GRAY);
+                // final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+
+                final AlertDialog dialog = dialogBuilder.create();
+
+
+                final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
+                daysScroll.setValue(1);
+
+                final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
+                quantityScroll.setVisibility(View.GONE);
+
+
+
+                delete.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        b.dismiss();
+                    }
+                });
+
+                TextView quantity = (TextView) dialogView.findViewById(R.id.textView);
+                final EditText name = (EditText) dialogView.findViewById(R.id.editTitle);
+
+                name.setText("");
+                name.setHint("Enter Item Name");
+                quantity.setVisibility(View.GONE);
+
+
+                Button save = (Button) dialogView.findViewById(R.id.btn_save);
+                save.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view)
+                    {
+                        Context context = getActivity();
+                        CharSequence text = "Save pressed!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        // toast.show();
+
+
+                        int reminder = daysScroll.getValue();
+                        String newTitle = name.getText().toString();
+
+
+                        if (newTitle.equals("")) {
+                            Context context2 =getActivity();
+                            CharSequence text2 = "Must enter item name in order to save item";
+                            int duration2 = Toast.LENGTH_SHORT;
+
+                            Toast toast2 = Toast.makeText(context2, text2, duration2);
+                            toast2.show();
+                        } else {
+                            String returned = checkIfExists(newTitle);
+                            if (returned.equals("")) {
+                                System.out.println("should be adding to database");
+                                System.out.println(newTitle);
+                                ShoppingItem temp = new ShoppingItem(newTitle, 0,reminder,"", false);
+                                long id = dbAdapt.insertItem(temp);
+                                System.out.println("this is the returned id: " + id);
+                                boolean suc = dbAdapt.updateField(id, 4, id+"");
+                                System.out.println(suc);
+                                ShoppingItem t = dbAdapt.getItem(id);
+                                System.out.println("the iID here is: " + t.getID());
+                            } else {
+                                dbAdapt.updateField(Long.parseLong(returned), 3, reminder+"");
+                            }
+
+
+
+                            b.dismiss();
+                            transaction = getFragmentManager().beginTransaction();
+                            transaction.detach(currFrag);
+                            transaction.attach(currFrag);
+                            transaction.commit();
+                        }
+
+
+                    }
+                });
+
+
+                b = dialogBuilder.create();
+                b.show();
+            }
+        });
+
     }
 
     // Called at the end of the active lifetime.
@@ -259,6 +362,18 @@ public class ContentExpirationFrag extends Fragment {
             } while (curse.moveToNext());
         Collections.sort(myItems);
         shopAdapt.notifyDataSetChanged();
+    }
+
+    public String checkIfExists(String name) {
+        Cursor curse = dbAdapt.getAllItems();
+        if (curse.moveToFirst())
+            do {
+                ShoppingItem result = new ShoppingItem(curse.getString(1), Integer.parseInt(curse.getString(2)),Integer.parseInt(curse.getString(3)),curse.getString(4), Boolean.parseBoolean(curse.getString(5)));
+                if (result.getName().equalsIgnoreCase(name)) { //only add if has reminder day set for it
+                    return result.getID();  // puts in reverse order
+                }
+            } while (curse.moveToNext());
+        return "";
     }
 
 
