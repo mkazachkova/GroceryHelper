@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -191,6 +192,8 @@ public class ContentExpirationFrag extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(3).setChecked(true);
         final Fragment currFrag = this;
         fab = ((MainActivity) getActivity()).getFloatingActionButton();
         fab.setVisibility(View.VISIBLE);
@@ -213,6 +216,8 @@ public class ContentExpirationFrag extends Fragment {
 
                 final ScrollableNumberPicker daysScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_days);
                 daysScroll.setValue(1);
+
+                daysScroll.setMinValue(1);
 
                 final ScrollableNumberPicker quantityScroll = (ScrollableNumberPicker) dialogView.findViewById(R.id.number_picker_quantity);
                 quantityScroll.setVisibility(View.GONE);

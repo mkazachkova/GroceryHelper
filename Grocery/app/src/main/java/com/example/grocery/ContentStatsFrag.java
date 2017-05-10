@@ -2,6 +2,7 @@ package com.example.grocery;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -70,6 +71,8 @@ public class ContentStatsFrag extends Fragment{
     public void onResume(){
         super.onResume();
         Log.d ("Content Fragment", "onResume");
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(2).setChecked(true);
         // Resume any paused UI updates, threads, or processes required
         // by the Fragment but suspended when it became inactive.
     }

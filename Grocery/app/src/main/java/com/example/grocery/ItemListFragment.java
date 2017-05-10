@@ -66,6 +66,8 @@ public class ItemListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         final Fragment currFrag = this;
+
+
         fab = ((MainActivity) getActivity()).getFloatingActionButton();
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +184,7 @@ public class ItemListFragment extends Fragment {
 
 
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
         View headerView = navigationView.getHeaderView(0);
         itemsNumb = (TextView)headerView.findViewById(R.id.numbItems);
         myPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
